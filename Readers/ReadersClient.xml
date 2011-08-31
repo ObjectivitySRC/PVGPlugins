@@ -44,10 +44,10 @@
   file_description="DXF files">
   </Reader>
 
-  <Reader name="SOTEPSReader"
+  <!--Reader name="SOTEPSReader"
   extensions="setr"
   file_description="SOT EPS Triangle File">
-  </Reader>
+  </Reader-->
 
   <Reader name="FDEMReader"
   extensions="ym"

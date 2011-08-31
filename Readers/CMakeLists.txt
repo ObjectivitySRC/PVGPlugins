@@ -28,7 +28,7 @@ DataMineReader
 DrillHoleReader
 DXFReader
 Ellipsoid
-EPSReader
+#EPSReader
 FDEM
 GocadReader
 GXFReader
@@ -66,7 +66,7 @@ DrillHoleReader/vtkDrillHoleReader.cxx
 DXFReader/vtkDXFReader.cxx
 Ellipsoid/vtkEllipsoid.cxx 
 Ellipsoid/vtkElliptic.cxx
-EPSReader/vtkEPSReader.cxx
+#EPSReader/vtkEPSReader.cxx
 FDEM/vtkFDEMReader.cxx
 GocadReader/vtkGocadReader.cxx 
 GocadReader/vtkGocadAtomic.cxx 
@@ -136,7 +136,7 @@ ShapeFileReader/mgexcept.cxx
 SET(PVGReaders_GUI_SRCS
 DataMineReader/pqDataMineWireFrameReader.cxx
 DrillHoleReader/pqDrillHoleReader.cxx
-EPSReader/pqEPSReader.cxx
+#EPSReader/pqEPSReader.cxx
 GocadReader/pqGocadReader.cxx
 PointSetReader/pqPointSetReader.cxx
 SOTResult/pqSOTResult.cxx
@@ -146,7 +146,7 @@ LineNetworkReader/pqLineNetworkReader.cxx
 SET(MOC_LIST
 DataMineReader/pqDataMineWireFrameReader.h
 DrillHoleReader/pqDrillHoleReader.h
-EPSReader/pqEPSReader.h
+#EPSReader/pqEPSReader.h
 GocadReader/pqGocadReader.h
 PointSetReader/pqPointSetReader.h
 SOTResult/pqSOTResult.h
@@ -174,8 +174,8 @@ ENDIF(PV_WIN32)
 ADD_PARAVIEW_OBJECT_PANEL(IFACES IFACE_SRCS CLASS_NAME pqDataMineWireFrameReader
                          XML_NAME DataMineWireFrameReader XML_GROUP sources)
 
-ADD_PARAVIEW_OBJECT_PANEL(IFACES2 IFACE_SRCS2 CLASS_NAME pqEPSReader
-                         XML_NAME SOTEPSReader XML_GROUP sources)
+#ADD_PARAVIEW_OBJECT_PANEL(IFACES2 IFACE_SRCS2 CLASS_NAME pqEPSReader
+#                         XML_NAME SOTEPSReader XML_GROUP sources)
                          
 ADD_PARAVIEW_OBJECT_PANEL(IFACES3 IFACE_SRCS3 CLASS_NAME pqSOTResult
                          XML_NAME SOTResult XML_GROUP sources)
@@ -199,8 +199,8 @@ IF(PV_WIN32)
 ENDIF(PV_WIN32)
 
 # Append EPSReader panel
-LIST(APPEND IFACES ${IFACES2})
-LIST(APPEND IFACE_SRCS ${IFACE_SRCS2})
+#LIST(APPEND IFACES ${IFACES2})
+#LIST(APPEND IFACE_SRCS ${IFACE_SRCS2})
 # Append SOTResult panel
 LIST(APPEND IFACES ${IFACES3})
 LIST(APPEND IFACE_SRCS ${IFACE_SRCS3})
