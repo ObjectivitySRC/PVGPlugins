@@ -1315,7 +1315,7 @@ void vtkMine24DtoMap3D::simplifyStopes()
 void vtkMine24DtoMap3D::convertStopes()
 {
 
-	map<int,list<pair<int,int*>>> segments;
+	map<int,list<pair<vtkIdType,vtkIdType*>>> segments;
 	int num;
 	map<int,int> color;
 	int colour;
@@ -1323,17 +1323,17 @@ void vtkMine24DtoMap3D::convertStopes()
 	int ActNum;
 
 	(inCells)->InitTraversal();
-	vtkIdType *npts = new vtkIdType();	// will store the number of points in current cell 
+	vtkIdType npts;	// will store the number of points in current cell 
 	vtkIdType *pts;	// will store a array of points id's in current cell 
 
 
 	
 	for (int currentCell = 0; currentCell<numberOfCells ; currentCell++)
 	{
-		inCells->GetNextCell(*npts, *&pts);
+		inCells->GetNextCell(npts, pts);
 		num = M4DNUM->GetComponent(currentCell,0);
 		color[num] = COLOUR->GetComponent(currentCell,0);
-		segments[num].push_back(pair<int,int*>(*npts,pts)); 
+		segments[num].push_back(pair<vtkIdType,vtkIdType*>(npts,pts)); 
 	}
 
 	map<string,int> activityNumbers;
@@ -1345,12 +1345,12 @@ void vtkMine24DtoMap3D::convertStopes()
 
 	outPoints->ShallowCopy(inPoints);
 
-	for(map<int,list<pair<int,int*>>>::iterator cells = segments.begin(); cells != segments.end(); cells++)
+	for(map<int,list<pair<vtkIdType,vtkIdType*>>>::iterator cells = segments.begin(); cells != segments.end(); cells++)
 	{
 		colour = color[cells->first];
 		colour = this->getColor(colour);
 
-		for(list<pair<int,int*>>::iterator cell = cells->second.begin(); cell != cells->second.end(); cell++)
+		for(list<pair<vtkIdType,vtkIdType*>>::iterator cell = cells->second.begin(); cell != cells->second.end(); cell++)
 		{
 			outCells->InsertNextCell(cell->first);
 			BlkNum->InsertValue(countCells,colour);

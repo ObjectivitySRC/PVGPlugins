@@ -33,6 +33,7 @@ FitDataset
 InsideClosedSurface
 IntersectWireframe
 MapAttributes
+Mine24DtoMap3D
 PlotPropertiesOverTime
 PolyLineAddPoints
 PolyToStruct
