@@ -68,10 +68,25 @@ INCLUDE_DIRECTORIES(${QT_QTUITOOLS_INCLUDE_DIR})
 ##########################################################################
 
 
+MACRO(paraview_build_optional_plugin name comment subdirectory default)
+  OPTION(PARAVIEW_BUILD_PLUGIN_${name} "Build ${comment}" ${default})
+  MARK_AS_ADVANCED(CLEAR PARAVIEW_BUILD_PLUGIN_${name})
+  IF(PARAVIEW_BUILD_PLUGIN_${name})
+    MESSAGE(STATUS "Plugin: ${comment} enabled")
+    ADD_SUBDIRECTORY("${subdirectory}")
+  ELSE(PARAVIEW_BUILD_PLUGIN_${name})
+    MESSAGE(STATUS "Plugin: ${comment} disabled")
+  ENDIF(PARAVIEW_BUILD_PLUGIN_${name})
+ENDMACRO(paraview_build_optional_plugin)
 
-ADD_SUBDIRECTORY(Filters)
-ADD_SUBDIRECTORY(Readers)
-ADD_SUBDIRECTORY(Writers)
+paraview_build_optional_plugin(
+    PVGFilters "ParaViewGeo-Filters" Filters ON)
+
+paraview_build_optional_plugin(
+    PVGReaders "ParaViewGeo Readers" Readers ON)
+
+paraview_build_optional_plugin(
+    PVGWriters "ParaViewGeo Writers" Writers ON)
 
 
 #########################################################################
