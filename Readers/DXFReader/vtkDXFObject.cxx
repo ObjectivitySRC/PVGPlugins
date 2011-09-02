@@ -676,7 +676,7 @@ int vtkDXFObject::RequestData(vtkInformation* request,
 		//need to confirm that the block actually has something before we add it!
 		if ( blockCounter != 0 )
 			{
-			output->SetNextBlock(currBlock );
+			output->SetBlock(output->GetNumberOfBlocks(), currBlock );
 			vtkIdType size = output->GetNumberOfBlocks() -1;
 			output->GetMetaData(size)->Set(vtkCompositeDataSet::NAME(), currLayer->getName());
 			}

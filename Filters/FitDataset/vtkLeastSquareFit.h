@@ -30,6 +30,8 @@ public:
 	// the orthogonal least square distance is used
 	static void fitPlane3D(double** points, int n, double N[3], double p[3],
 		bool computeCentroid = true);
+
+	static void Centroid(double** points, int n, double* centroid);
 };
 
 

@@ -14,7 +14,7 @@ void vtkLeastSquareFit::fitLine3D(double** points, int n, double V[3], double p[
 	double dx, dy, dz;
 	
 	if(computeCentroid)
-		vtkMath::Centroid(points, n, p);
+		vtkLeastSquareFit::Centroid(points, n, p);
 
 	for(int i=0; i<n; i++)
 	{
@@ -83,7 +83,7 @@ void vtkLeastSquareFit::fitPlane3D(double** points, int n, double N[3], double p
 	double dx, dy, dz;
 	
 	if(computeCentroid)
-		vtkMath::Centroid(points, n, p);
+		vtkLeastSquareFit::Centroid(points, n, p);
 
 	for(int i=0; i<n; i++)
 	{
@@ -135,4 +135,23 @@ void vtkLeastSquareFit::fitPlane3D(double** points, int n, double N[3], double p
 	N[0] = eigVectors[0][posMin];
 	N[1] = eigVectors[1][posMin];
 	N[2] = eigVectors[2][posMin];
+}
+
+//----------------------------------------------------------------------------
+void vtkLeastSquareFit::Centroid(double** points, int n, double* centroid)
+{
+	double xsum = 0.0;
+	double ysum = 0.0;
+	double zsum = 0.0;
+
+	for(int i=0; i<n; i++)
+	{
+		xsum += points[i][0];
+		ysum += points[i][1];
+		zsum += points[i][2];
+	}
+
+	centroid[0] = xsum/n;
+	centroid[1] = ysum/n;
+	centroid[2] = zsum/n;
 }

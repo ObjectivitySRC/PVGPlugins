@@ -23,7 +23,7 @@ ${QtTesting_BINARY_DIR}
 ${QtPython_SOURCE_DIR}
 ${QtPython_BINARY_DIR}
 ApplySchedule
-Annotation
+AnnotateVolume
 BoundingBox
 CleanCells
 ComputeVolumes
@@ -34,7 +34,7 @@ InsideClosedSurface
 IntersectWireframe
 MapAttributes
 Mine24DtoMap3D
-PlotPropertiesOverTime
+#PlotPropertiesOverTime
 PolyLineAddPoints
 PolyToStruct
 ProximityThreshold
@@ -52,11 +52,14 @@ TimeThreshold
 TopOfCell
 VTKBultIn
 Ruler
+../common
+
+
 )
 
 SET( PVGFilters_SM_SRCS
 ApplySchedule/vtkApplySchedule.cxx
-Annotation/vtkAnnotation.cxx
+AnnotateVolume/vtkAnnotateVolume.cxx
 BoundingBox/vtkBBox.cxx
 CleanCells/vtkCleanCells.cxx
 ComputeVolumes/vtkComputeVolumes.cxx
@@ -72,7 +75,7 @@ MapAttributes/vtkMapAttributesToGrid.cxx
 MapAttributes/vtkMapAttributesFromGrid.cxx
 MapAttributes/vtkMapAttributes.cxx 
 Mine24DtoMap3D/vtkMine24DtoMap3D.cpp
-PlotPropertiesOverTime/vtkPlotPropertiesOverTime.cxx
+#PlotPropertiesOverTime/vtkPlotPropertiesOverTime.cxx
 PolyLineAddPoints/vtkPolyLineAddPoints.cxx
 PolyToStruct/vtkPolyStruct.cxx
 ProximityThreshold/vtkProximityThreshold.cxx
@@ -110,9 +113,9 @@ RegexThreshold/pqRegexThreshold.cxx
 SumBillboard/pqSumBillboardPanel.cxx
 tetgen/pqTetgen.cxx
 TimeThreshold/pqTimeThreshold.cxx
-PlotPropertiesOverTime/pqPlotPropertiesOverTime.cxx
-PlotPropertiesOverTime/pqPlotPropertiesOverTimePanel.cxx
-PlotPropertiesOverTime/pqLabelFormatter.cxx
+#PlotPropertiesOverTime/pqPlotPropertiesOverTime.cxx
+#PlotPropertiesOverTime/pqPlotPropertiesOverTimePanel.cxx
+#PlotPropertiesOverTime/pqLabelFormatter.cxx
 RadialDistance/pqRadialDistanceWidget.cxx
 SharedCode/TimeConverter.cxx
 Ruler/pqRuler.cxx
@@ -128,9 +131,9 @@ RegexThreshold/pqRegexThreshold.h
 SumBillboard/pqSumBillboardPanel.h
 tetgen/pqTetgen.h
 TimeThreshold/pqTimeThreshold.h
-PlotPropertiesOverTime/pqPlotPropertiesOverTime.h
-PlotPropertiesOverTime/pqPlotPropertiesOverTimePanel.h
-PlotPropertiesOverTime/pqLabelFormatter.h
+#PlotPropertiesOverTime/pqPlotPropertiesOverTime.h
+#PlotPropertiesOverTime/pqPlotPropertiesOverTimePanel.h
+#PlotPropertiesOverTime/pqLabelFormatter.h
 RadialDistance/pqRadialDistanceWidget.h
 Ruler/pqRuler.h
 Mine24DtoMap3D/pqMine24DtoMap3D.h
@@ -159,11 +162,11 @@ ADD_PARAVIEW_OBJECT_PANEL(IFACES6 IFACE_SRCS6 CLASS_NAME pqTetgen
 ADD_PARAVIEW_OBJECT_PANEL(IFACES7 IFACE_SRCS7 CLASS_NAME pqTimeThreshold
                          XML_NAME TimeThreshold XML_GROUP filters)
                          
-ADD_PARAVIEW_OBJECT_PANEL(IFACES8 IFACE_SRCS8 CLASS_NAME pqPlotPropertiesOverTimePanel
-                         XML_NAME "Plot Properties Over Time" XML_GROUP filters)
+#ADD_PARAVIEW_OBJECT_PANEL(IFACES8 IFACE_SRCS8 CLASS_NAME pqPlotPropertiesOverTimePanel
+#                         XML_NAME "Plot Properties Over Time" XML_GROUP filters)
  
-ADD_PARAVIEW_VIEW_MODULE(IFACES9 IFACE_SRCS9 VIEW_TYPE pqPlotPropertiesOverTime
-                         VIEW_XML_GROUP views)
+#ADD_PARAVIEW_VIEW_MODULE(IFACES9 IFACE_SRCS9 VIEW_TYPE pqPlotPropertiesOverTime
+#                         VIEW_XML_GROUP views)
                          
 ADD_PARAVIEW_OBJECT_PANEL(IFACES10 IFACE_SRCS10 CLASS_NAME pqRadialDistanceWidget
                          XML_NAME "Radial Distance" XML_GROUP filters)

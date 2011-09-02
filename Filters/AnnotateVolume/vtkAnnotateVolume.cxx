@@ -10,7 +10,7 @@
   Version:   0.8
 
   =========================================================================*/
-#include "vtkAnnotation.h"
+#include "vtkAnnotateVolume.h"
 #include "vtkInformation.h"
 #include "vtkInformationVector.h"
 #include "vtkObjectFactory.h"
@@ -26,30 +26,30 @@
 #include <vtkstd/string>
 #include <sstream>
 
-vtkStandardNewMacro(vtkAnnotation);
-vtkCxxRevisionMacro(vtkAnnotation, "$Revision: 1.1 $");
+vtkStandardNewMacro(vtkAnnotateVolume);
+vtkCxxRevisionMacro(vtkAnnotateVolume, "$Revision: 1.1 $");
 //----------------------------------------------------------------------------
-vtkAnnotation::vtkAnnotation()
+vtkAnnotateVolume::vtkAnnotateVolume()
 {
-  this->Format = 0;
-  this->SetFormat("Volume for object");  
+  this->Format = NULL;
+  this->SetFormat("Volume for object");
 }
 
 //----------------------------------------------------------------------------
-vtkAnnotation::~vtkAnnotation()
+vtkAnnotateVolume::~vtkAnnotateVolume()
 {
-  this->SetFormat(0);
+  this->Format = NULL;
 }
 
 //----------------------------------------------------------------------------
-int vtkAnnotation::FillInputPortInformation(int vtkNotUsed(port), vtkInformation* info)
+int vtkAnnotateVolume::FillInputPortInformation(int vtkNotUsed(port), vtkInformation* info)
 {
   info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkDataSet");  
   return 1;
 }
 
 //----------------------------------------------------------------------------
-int vtkAnnotation::RequestData(vtkInformation* vtkNotUsed(request), vtkInformationVector** inputVector, vtkInformationVector* outputVector)
+int vtkAnnotateVolume::RequestData(vtkInformation* vtkNotUsed(request), vtkInformationVector** inputVector, vtkInformationVector* outputVector)
 {
   
 	vtkInformation *outInfo = outputVector->GetInformationObject(0);
@@ -122,7 +122,7 @@ int vtkAnnotation::RequestData(vtkInformation* vtkNotUsed(request), vtkInformati
 }
 
 //----------------------------------------------------------------------------
-void vtkAnnotation::PrintSelf(ostream& os, vtkIndent indent)
+void vtkAnnotateVolume::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
   os << indent << "Format: " << (this->Format? this->Format : "(none)") << endl;

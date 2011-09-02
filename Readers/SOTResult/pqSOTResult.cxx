@@ -411,7 +411,7 @@ void pqSOTResult::setup3DWidgetsIfNeeded()
       if (widgets.size() == 1)
         {
         	this->boxWidget = qobject_cast<pqBoxWidget*>(widgets[0]);
-					this->boxWidget->setRotatable(false);
+					//this->boxWidget->setRotatable(false);
 					widget = this->boxWidget;
 
 					this->sliceFrame->addWidget(widget);

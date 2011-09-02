@@ -1,15 +1,15 @@
 
-#ifndef __vtkAnnotation_h
-#define __vtkAnnotation_h
+#ifndef __vtkAnnotateVolume_h
+#define __vtkAnnotateVolume_h
 
 #include "vtkTableAlgorithm.h"
 
 
-class VTK_EXPORT vtkAnnotation : public vtkTableAlgorithm
+class VTK_EXPORT vtkAnnotateVolume : public vtkTableAlgorithm
 {
   public:
-    static vtkAnnotation* New();
-    vtkTypeRevisionMacro(vtkAnnotation, vtkTableAlgorithm);
+    static vtkAnnotateVolume* New();
+    vtkTypeRevisionMacro(vtkAnnotateVolume, vtkTableAlgorithm);
     void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description:
@@ -18,8 +18,8 @@ class VTK_EXPORT vtkAnnotation : public vtkTableAlgorithm
     vtkGetStringMacro(Format);
     
   protected:
-    vtkAnnotation();
-    ~vtkAnnotation();
+    vtkAnnotateVolume();
+    ~vtkAnnotateVolume();
 
     
     virtual int RequestData(vtkInformation* request, vtkInformationVector** inputVector, vtkInformationVector* outputVector);
@@ -31,8 +31,8 @@ class VTK_EXPORT vtkAnnotation : public vtkTableAlgorithm
     int    SelectedComponent;
   
   private:
-    vtkAnnotation(const vtkAnnotation&); // Not implemented
-    void operator=(const vtkAnnotation&); // Not implemented
+    vtkAnnotateVolume(const vtkAnnotateVolume&); // Not implemented
+    void operator=(const vtkAnnotateVolume&); // Not implemented
 };
 
 #endif

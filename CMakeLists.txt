@@ -79,14 +79,30 @@ MACRO(paraview_build_optional_plugin name comment subdirectory default)
   ENDIF(PARAVIEW_BUILD_PLUGIN_${name})
 ENDMACRO(paraview_build_optional_plugin)
 
-paraview_build_optional_plugin(
-    PVGFilters "ParaViewGeo-Filters" Filters ON)
+#paraview_build_optional_plugin(
+#    PVGFilters "ParaViewGeo-Filters" Filters ON)
+#
+#paraview_build_optional_plugin(
+#    PVGReaders "ParaViewGeo-Readers" Readers ON)
+#
+#paraview_build_optional_plugin(
+#    PVGWriters "ParaViewGeo-Writers" Writers ON)
 
-paraview_build_optional_plugin(
-    PVGReaders "ParaViewGeo Readers" Readers ON)
+OPTION(ParaViewGeo_Filters "Build ParaViewGeo Filters" ON)
+OPTION(ParaViewGeo_Readers "Build ParaViewGeo Readers" ON)
+OPTION(ParaViewGeo_Writers "Build ParaViewGeo Writers" ON)
 
-paraview_build_optional_plugin(
-    PVGWriters "ParaViewGeo Writers" Writers ON)
+IF (ParaViewGeo_Filters)
+	ADD_SUBDIRECTORY(Filters)
+ENDIF(ParaViewGeo_Filters)
+
+IF (ParaViewGeo_Readers)
+	ADD_SUBDIRECTORY(Readers)
+ENDIF(ParaViewGeo_Readers)
+
+IF(ParaViewGeo_Writers)
+	ADD_SUBDIRECTORY(Writers)
+ENDIF(ParaViewGeo_Writers)
 
 
 #########################################################################

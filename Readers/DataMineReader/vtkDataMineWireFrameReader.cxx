@@ -643,7 +643,7 @@ void vtkDataMineWireFrameReader::SetCellArrayStatus(const char* name, int status
 		{
 		case 2:
 		case 1:
-			this->CellDataArraySelection->EnableArray(name,status);						
+			this->CellDataArraySelection->EnableArray(name);						
 			break;
 		case 0:
 		default:

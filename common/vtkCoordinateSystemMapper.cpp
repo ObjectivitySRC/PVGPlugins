@@ -166,3 +166,29 @@ void vtkCoordinateSystemMapper::computeMappingMatrices()
 	TA_B->SetElement(3,2, 0.0);
 	TA_B->SetElement(3,3, 1.0);
 }
+
+
+//----------------------------------------------------------------
+void vtkCoordinateSystemMapper::mapPointA_B(const double in[3], double out[3])
+	{
+		p[0] = in[0];
+		p[1] = in[1];
+		p[2] = in[2];
+		p[3] = 1;
+		this->TA_B->MultiplyPoint(p, p);
+		out[0] = p[0];
+		out[1] = p[1];
+		out[2] = p[2];
+	}
+//----------------------------------------------------------------
+void vtkCoordinateSystemMapper::mapPointB_A(const double in[3], double out[3])
+	{
+		p[0] = in[0];
+		p[1] = in[1];
+		p[2] = in[2];
+		p[3] = 1;
+		this->TB_A->MultiplyPoint(p, p);
+		out[0] = p[0];
+		out[1] = p[1];
+		out[2] = p[2];
+	}

@@ -8,7 +8,6 @@
       <file>SumBillboard/SumBillboard.ui</file>
       <file>tetgen/pqTetgen.ui</file>
       <file>TimeThreshold/pqTimeThreshold.ui</file>
-      <file>PlotPropertiesOverTime/pqPlotPropertiesOverTimePanel.ui</file>
-	  <file>pqMine24DtoMap3D.ui</file>
+	  <file>Mine24DtoMap3D/pqMine24DtoMap3D.ui</file>
     </qresource>
 </RCC>

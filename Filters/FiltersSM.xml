@@ -1209,9 +1209,10 @@
    default_values="Total Value ">
       </StringVectorProperty>
 
-      <Hints>
-        <Visibility replace_input="2" />
-      </Hints>
+     <Hints>
+       <Visibility replace_input="0" />
+       <OutputPort name="Output-0" index="0" type="text" />
+     </Hints>
     </SourceProxy>
 
 
@@ -1815,9 +1816,10 @@
 	default_values="The Start and End Time's are: ">
       </StringVectorProperty>
 
-      <Hints>
-        <Visibility replace_input="2" />
-      </Hints>
+     <Hints>
+       <Visibility replace_input="0" />
+       <OutputPort name="Output-0" index="0" type="text" />
+     </Hints>
     </SourceProxy>
     
     <!-- TimeThreshold -->
@@ -2155,7 +2157,7 @@ The points are expected to be in a mostly planar distribution."
     
     
     <!-- Annotate Volume -->
-    <SourceProxy name="Annotate Volume" class="vtkAnnotation">
+    <SourceProxy name="Annotate Volume" class="vtkAnnotateVolume">
       <InputProperty name="Input"
 		    command="SetInputConnection">
       <ProxyGroupDomain name="groups">
@@ -2173,7 +2175,8 @@ The points are expected to be in a mostly planar distribution."
         default_values="Volume for object">     
       </StringVectorProperty>
      <Hints>
-       <Visibility replace_input="2" />
+       <Visibility replace_input="0" />
+       <OutputPort name="Output-0" index="0" type="text" />
      </Hints>
    </SourceProxy>
    <!-- End Annotate Volume -->
