@@ -55,21 +55,11 @@ int vtkAnnotateVolume::RequestData(vtkInformation* vtkNotUsed(request), vtkInfor
 	vtkInformation *outInfo = outputVector->GetInformationObject(0);
 	vtkTable* output = vtkTable::SafeDownCast(outInfo->Get( vtkDataObject::DATA_OBJECT() ));//vtkTable::GetData(outputVector);
   vtkInformation *inInfo = inputVector[0]->GetInformationObject(0);
-  vtkDataSet *input = vtkDataSet::SafeDownCast(inInfo->Get(vtkDataObject::DATA_OBJECT()));
-
-	// MLivingstone
-	// New way of getting volume, much more accurate
-	// Use tetgen to tetrahedralize the data
-	vtkTetgen *tetgenObj = vtkTetgen::New();
-	tetgenObj->SetInput(input);
-	tetgenObj->SettetgenCommand(1);
-	tetgenObj->SetWithRegions(1);
-	tetgenObj->Update();
+  vtkPolyData *input = vtkPolyData::SafeDownCast(inInfo->Get(vtkDataObject::DATA_OBJECT()));
 
 	// Use ComputeVolumes to calculate the volume of the tetrahedrons
 	vtkComputeVolumes *compVol = vtkComputeVolumes::New();
-	compVol->SetInput(tetgenObj->GetOutput());
-	compVol->SetRegionArray("Region Numbers");
+	compVol->SetInput(input);
 	compVol->Update();
 
 	// regionVols will hold the volume for each region (each individual closed surface)
@@ -115,7 +105,6 @@ int vtkAnnotateVolume::RequestData(vtkInformation* vtkNotUsed(request), vtkInfor
   
   //cleanup
   data->Delete();
-	tetgenObj->Delete();
 	compVol->Delete();
 	regionVols->Delete();
   return 1;
