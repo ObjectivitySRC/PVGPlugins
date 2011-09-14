@@ -196,12 +196,13 @@ int vtkOBBtoGrid::RequestData(vtkInformation *request, vtkInformationVector **in
 	//set all the information for the output
 	// Set the extents of the space
 	outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), extents, 6);
-	//output->SetExtent(extents);
 	output->SetDimensions(this->GridSize[0]+1, this->GridSize[1]+1, this->GridSize[2]+1);
+	//output->SetExtent(extents);
 	output->SetPoints( outPoints );
 	
+	
 
-	outPoints->Delete();
+	//outPoints->Delete();
 
   return 1;
 }

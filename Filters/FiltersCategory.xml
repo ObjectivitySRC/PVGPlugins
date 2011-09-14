@@ -1,6 +1,6 @@
 <ParaViewFilters>
  <Category name="Objectivity">
-   <!-- Lets try to keep this in alphabetical order -->
+   <!-- Keep this in alphabetical order -->
    <Filter name="Add Points" />
    <Filter name="Annotate Volume" />
    <Filter name="Apply Schedule"/>
@@ -15,9 +15,10 @@
    <Filter name="Intersection Wireframe"/>
    <Filter name="Map Attributes From Grid"/>
    <Filter name="Mine24D to Map3D"/>
-   <Filter name="Plot Properties Over Time" />
+   <Filter name="Box to Grid" />
    <Filter name="PolyStruct"/>
    <Filter name="Proximity Threshold"/>
+   <Filter name="Proximity To Lines"/>
    <Filter name="Radial Distance"/>
    <Filter name="RegexThreshold"/>
    <Filter name="RelativeTransform"/>

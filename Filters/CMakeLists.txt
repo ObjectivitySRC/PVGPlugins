@@ -35,9 +35,11 @@ IntersectWireframe
 MapAttributes
 Mine24DtoMap3D
 #PlotPropertiesOverTime
+OBBtoGrid
 PolyLineAddPoints
 PolyToStruct
 ProximityThreshold
+ProximityToLines
 RadialDistance
 RegexThreshold
 RelativeTransform
@@ -76,9 +78,11 @@ MapAttributes/vtkMapAttributesFromGrid.cxx
 MapAttributes/vtkMapAttributes.cxx 
 Mine24DtoMap3D/vtkMine24DtoMap3D.cpp
 #PlotPropertiesOverTime/vtkPlotPropertiesOverTime.cxx
+OBBtoGrid/vtkOBBtoGrid.cpp
 PolyLineAddPoints/vtkPolyLineAddPoints.cxx
 PolyToStruct/vtkPolyStruct.cxx
 ProximityThreshold/vtkProximityThreshold.cxx
+ProximityToLines/vtkProximityToLines.cpp
 RadialDistance/vtkRadialDistance.cxx
 RegexThreshold/vtkRegexThreshold.cxx
 RelativeTransform/vtkRelativeTransform.cxx

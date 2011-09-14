@@ -815,6 +815,36 @@
       </StringVectorProperty>
     </SourceProxy>
 
+	<!-- Oriented Bounding Box to Grid -->
+    <SourceProxy name="Box to Grid" class="vtkOBBtoGrid">
+
+      <InputProperty
+        name="Input"
+        command="SetInputConnection">
+        <ProxyGroupDomain name="groups">
+          <Group name="sources"/>
+          <Group name="filters"/>
+        </ProxyGroupDomain>
+        <DataTypeDomain name="input_type">
+          <DataType value="vtkPolyData"/>
+        </DataTypeDomain>
+      </InputProperty>
+
+      <IntVectorProperty
+         name="GridSize"
+         command="SetGridSize"
+         number_of_elements="3"
+         animateable="1"
+         default_values="5 5 5" >
+        <IntRangeDomain name="range" min="1 1 1" />
+        <Documentation>
+          This property specifies the number of cube in x,y and z direction.
+        </Documentation>
+      </IntVectorProperty>
+      
+    </SourceProxy>
+
+	
     <!-- PolyStruct -->
     <SourceProxy name="PolyStruct" class="vtkPolyStruct"
      label="Polygon To Grid">
@@ -901,8 +931,46 @@
        default_values="1">
         <BooleanDomain name="bool"/>
       </IntVectorProperty>
-
     </SourceProxy>
+	
+	
+	<!-- Proximity To Lines -->
+    <SourceProxy name="Proximity To Lines" class="vtkProximityToLines">
+      <!-- the lines -->
+      <InputProperty name="Source" label="Lines" command="SetSourceConnection">
+        <ProxyGroupDomain name="groups">
+          <Group name="sources"/>
+          <Group name="filters"/>
+        </ProxyGroupDomain>
+        <DataTypeDomain name="input_type">
+          <DataType value="vtkPolyData"/>
+        </DataTypeDomain>
+        <Documentation>
+          Something
+        </Documentation>
+      </InputProperty>
+	  
+      <InputProperty name="Input" label="Points" command="SetInputConnection">
+        <ProxyGroupDomain name="groups">
+          <Group name="sources"/>
+          <Group name="filters"/>
+        </ProxyGroupDomain>
+        <DataTypeDomain name="input_type">
+          <DataType value="vtkPolyData"/>
+        </DataTypeDomain>
+        <Documentation>
+          Something
+        </Documentation>
+      </InputProperty>      
+
+      <IntVectorProperty
+        name="NClosestLines"
+        command="SetNClosestLines"
+        number_of_elements="1"
+        default_values="1">
+      </IntVectorProperty>      
+
+    </SourceProxy>	
 
     <!-- Radial Distance -->
     <!--<SourceProxy name="Radial Distance" class="vtkRadialDistance">
