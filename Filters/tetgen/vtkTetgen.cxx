@@ -298,7 +298,7 @@ int vtkTetgen::RequestData(vtkInformation *vtkNotUsed(request),
 	if(WithRegions || (WithPredefinedRegions)) // if (find regions is selected) or (with MAP3D regions is selected and
 																																			// the input data are MAP3D data)	
 	{
-		BlkNum->SetName("Region Numbers");	// create a data array called "Region Numbers"
+		BlkNum->SetName(vtkTetgen::getRegionsArrayName());	
 	}
 
 	

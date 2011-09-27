@@ -13,8 +13,6 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-//#include <conio.h>
-//#include <windows.h>
 #include <stdlib.h>
 #include "vtkPPolyDataNormals.h"
 #include "vtkCleanPolyData.h"
@@ -22,6 +20,8 @@
 #include "vtkGenericCell.h"
 #include<sstream>
 #include<fstream> 
+
+#include "vtkTetgen.h"
 
 
 
@@ -33,17 +33,20 @@ string doubleToString(double in);
 vtkCxxRevisionMacro(vtkComputeVolumes, "$Revision: 1.34 $");
 vtkStandardNewMacro(vtkComputeVolumes);
 
+
+//_____________________________________________________________________________________
 vtkComputeVolumes::vtkComputeVolumes()
 {
-	this->RegionArray = NULL;
 	this->VolumesArray = NULL;
 }
+
+//_____________________________________________________________________________________
 vtkComputeVolumes:: ~vtkComputeVolumes()
 {
 
 }
 
-
+//_____________________________________________________________________________________
 int vtkComputeVolumes::RequestData(vtkInformation *vtkNotUsed(request), 
 	vtkInformationVector **inputVector, vtkInformationVector *outputVector)
 {
@@ -52,11 +55,25 @@ int vtkComputeVolumes::RequestData(vtkInformation *vtkNotUsed(request),
   vtkInformation *outInfo = outputVector->GetInformationObject(0);
 
   // get the input and ouptut
-  vtkUnstructuredGrid *input = vtkUnstructuredGrid::SafeDownCast(
+  vtkPolyData *input = vtkPolyData::SafeDownCast(
     inInfo->Get(vtkDataObject::DATA_OBJECT()));
   vtkUnstructuredGrid *output = vtkUnstructuredGrid::SafeDownCast(
     outInfo->Get(vtkDataObject::DATA_OBJECT()));
 
+  vtkTetgen *tetgenObj = vtkTetgen::New();
+  tetgenObj->SetInput(input);
+  tetgenObj->SettetgenCommand(1);
+  tetgenObj->SetWithRegions(1);
+  tetgenObj->Update();
+
+  int res = this->computeVolumes(tetgenObj->GetOutput(), output);
+  tetgenObj->Delete();
+  return res;
+}
+
+//_____________________________________________________________________________________
+int vtkComputeVolumes::computeVolumes(vtkUnstructuredGrid *input, vtkUnstructuredGrid *output)
+{
 	double currentPoint[3];
 	double p1[3];
 	double p2[3];
@@ -69,7 +86,8 @@ int vtkComputeVolumes::RequestData(vtkInformation *vtkNotUsed(request),
 	string vArray;
 
 	vtkIntArray *regionNumbers;
-	regionNumbers = vtkIntArray::SafeDownCast(input->GetCellData()->GetArray(this->RegionArray));
+	regionNumbers = vtkIntArray::SafeDownCast(
+		input->GetCellData()->GetArray(vtkTetgen::getRegionsArrayName()));
 
 	if(!regionNumbers)
 	{

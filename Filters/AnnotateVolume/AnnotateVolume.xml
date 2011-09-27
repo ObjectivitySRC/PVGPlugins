@@ -8,7 +8,7 @@
 	  <Group name="filters"/>
 	</ProxyGroupDomain>
 	<DataTypeDomain name="input_type">
-	  <DataType value="vtkDataSet"/>
+	  <DataType value="vtkPolyData"/>
 	</DataTypeDomain>
       </InputProperty>      
       <StringVectorProperty

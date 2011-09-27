@@ -41,6 +41,8 @@ Description:
 
 #include "vtkUnstructuredGrid.h"
 #include "vtkUnstructuredGridAlgorithm.h"
+#include "vtkPolyData.h"
+#include "vtkPolyDataAlgorithm.h"
 #include "vtkDoubleArray.h"
 
 
@@ -53,9 +55,6 @@ public:
 	void copyPoint(double *src, double *dest);
 	double tetrahedronVolume(double *p1, double *p2, double *p3, double *p4); 
 
-	vtkSetStringMacro(RegionArray);
-	vtkGetStringMacro(RegionArray);
-
 	char* GetVolumesArray()
 	{
 		return VolumesArray;
@@ -67,7 +66,8 @@ protected:
   virtual int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *);
   virtual int FillInputPortInformation(int port, vtkInformation *info);
 
-	char* RegionArray;
+  int computeVolumes(vtkUnstructuredGrid* input, vtkUnstructuredGrid* output);
+
 	char *VolumesArray;
 
 private:
