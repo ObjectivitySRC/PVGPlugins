@@ -46,6 +46,7 @@ vtkSumBillboard::vtkSumBillboard()
 vtkSumBillboard::~vtkSumBillboard()
 {
   this->SetFormat(0);
+  this->NDecimals = 2;
 }
 
 //----------------------------------------------------------------------------
@@ -112,7 +113,10 @@ int vtkSumBillboard::RequestData(
       }
     }
             
-  vtkstd::ostringstream buffer;      
+  vtkstd::ostringstream buffer;  
+  buffer.setf(ios::scientific);
+  buffer.precision(this->NDecimals);
+  
   buffer << this->Format << sum << endl;
   
   vtkStringArray * data = vtkStringArray::New();  

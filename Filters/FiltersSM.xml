@@ -1208,6 +1208,13 @@
    number_of_elements="1"
    default_values="Total Value ">
       </StringVectorProperty>
+	  
+		<IntVectorProperty
+        name="NDecimals"
+        command="SetNDecimals"
+	number_of_elements="1"
+	default_values="2">     
+      </IntVectorProperty>	
 
      <Hints>
        <Visibility replace_input="0" />

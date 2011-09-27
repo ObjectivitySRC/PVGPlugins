@@ -23,6 +23,9 @@ class VTK_EXPORT vtkSumBillboard : public vtkTableAlgorithm
   // component. The default value is 0.
     vtkSetClampMacro(SelectedComponent,int,0,VTK_INT_MAX);
     vtkGetMacro(SelectedComponent,int);    
+
+	vtkSetMacro(NDecimals, int);
+	vtkGetMacro(NDecimals, int);
     
   protected:
     vtkSumBillboard();
@@ -33,7 +36,7 @@ class VTK_EXPORT vtkSumBillboard : public vtkTableAlgorithm
     virtual int FillInputPortInformation(int port, vtkInformation* info);
     char* Format;            
     int    SelectedComponent;
-        
+    int NDecimals;
   
   private:
     vtkSumBillboard(const vtkSumBillboard&); // Not implemented
