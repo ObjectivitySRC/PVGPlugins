@@ -3,29 +3,38 @@
 
 #include "pqLoadedFormObjectPanel.h"
 #include "pqComponentsExport.h"
-#include "vtkEventQtSlotConnect.h"
-#include "vtkSmartPointer.h"
 
-#include <QMap>
-#include <QTableWidget>
-#include <QDockWidget>
+#include <QString>
 
-class QComboBox;
-class vtkSMStringVectorProperty;
+class QLineEdit;
 
 class pqFLAC3DReader : public pqLoadedFormObjectPanel {
-  Q_OBJECT
-public:
-  /// constructor
-  pqFLAC3DReader(pqProxy* proxy, QWidget* p = NULL);
-  /// destructor
-  ~pqFLAC3DReader();
 
-   virtual void accept();
-    
+	Q_OBJECT
+public:
+	/// constructor
+	pqFLAC3DReader(pqProxy* proxy, QWidget* p = NULL);
+	/// destructor
+	~pqFLAC3DReader();
+
+	virtual void accept();
+
+	protected slots:
+		void selectDispFile();
+		void selectScalarsFile();
+		void selectTensorsFile();   
+
 protected:
-  /// populate widgets with properties from the server manager
-  virtual void linkServerManagerProperties();
+	/// populate widgets with properties from the server manager
+	virtual void linkServerManagerProperties();
+
+
+
+	QLineEdit* dispFile;
+	QLineEdit* scalarsFile;
+	QLineEdit* tensorsFile;
+
+	QString path;
 };
 
 #endif

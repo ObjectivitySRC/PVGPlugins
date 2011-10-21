@@ -24,6 +24,15 @@ public:
 
 	vtkSetStringMacro(FileName);  
 
+	vtkSetStringMacro(DisplacementVectorsFile);
+	vtkGetStringMacro(DisplacementVectorsFile);
+
+	vtkSetStringMacro(ZonesScalarsFile);
+	vtkGetStringMacro(ZonesScalarsFile);
+
+	vtkSetStringMacro(ZonesTensorsFile);
+	vtkGetStringMacro(ZonesTensorsFile);
+
 	int CanReadFile( const char* fname );
 
 
@@ -39,9 +48,13 @@ protected:
                   vtkInformationVector** inputVector,
                   vtkInformationVector* outputVector);
 
-private:
+  void importDisplacements(vtkUnstructuredGrid* output);
+  void importScalars(vtkUnstructuredGrid* output);
 
 	const char* FileName; 
+	char* DisplacementVectorsFile;
+	char* ZonesScalarsFile;
+	char* ZonesTensorsFile;
 };
 
 #endif
