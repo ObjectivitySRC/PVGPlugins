@@ -111,6 +111,7 @@ IF(PV_WIN32)
 ENDIF(PV_WIN32)
 
 SET( PVGReaders_EXTRA_SRCS
+../common/StringUtilities.h
 DataMineReader/dmfile.cxx
 DataMineReader/PropertyStorage.cxx
 DataMineReader/PointMap.cxx
