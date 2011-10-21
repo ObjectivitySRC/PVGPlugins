@@ -230,6 +230,7 @@ int vtkFLAC3DReader::RequestData(vtkInformation* request,
 
 	this->importDisplacements(output);
 	this->importScalars(output);
+	this->importTensors(output);
 
 	return 1;
 }
@@ -390,4 +391,69 @@ void vtkFLAC3DReader::importScalars(vtkUnstructuredGrid *output)
 	output->GetCellData()->AddArray(frictionArray);
 	output->GetCellData()->AddArray(excavationYearArray);
 	output->GetCellData()->AddArray(damageArray);
+}
+
+
+//_________________________________________________________________________
+void vtkFLAC3DReader::importTensors(vtkUnstructuredGrid *output)
+{
+	// Make sure we have a file to read.
+	if(!this->ZonesTensorsFile)  {
+		return;
+	}
+	if(strlen(this->ZonesTensorsFile)==0)  {
+		return;
+	}
+
+
+	ifstream inFile;
+	inFile.open(this->ZonesTensorsFile, ios::in);
+	if(!inFile)
+	{
+		vtkErrorMacro("File Error: cannot open file: "<< this->ZonesTensorsFile);
+		return;
+	}
+
+	vtkDoubleArray* tensorsArray = vtkDoubleArray::New();
+	tensorsArray->SetName("tensors(Pa)");
+	tensorsArray->SetNumberOfComponents(9);
+	
+	tensorsArray->SetNumberOfTuples(output->GetNumberOfPoints());
+	for(vtkIdType i=0; i<output->GetNumberOfPoints(); ++i)
+	{
+		tensorsArray->SetTuple9(i,0,0,0,0,0,0,0,0,0);
+	}
+
+	string line;
+	vector<string> lineSplit;
+
+	// skip the headers
+	while(!inFile.eof())
+	{
+		getline(inFile, line);
+		if(line.size() > 0)
+			break;
+	}
+
+	while(!inFile.eof())
+	{
+		getline(inFile, line);
+		if(line.size() < 4)
+			continue;
+
+		StringUtilities::split(line, lineSplit, ";");
+		vtkIdType id = atoi(lineSplit[0].c_str()) - 1;
+		double sxx = atof(lineSplit[1].c_str());
+		double syy = atof(lineSplit[2].c_str());
+		double szz = atof(lineSplit[3].c_str());
+		double sxy = atof(lineSplit[4].c_str());
+		double sxz = atof(lineSplit[5].c_str());
+		double syz = atof(lineSplit[6].c_str());
+
+		tensorsArray->SetTuple9(id, sxx, sxy, sxz, sxy, syy, syz, sxz, syz, szz);
+	}
+
+	inFile.close();
+
+	output->GetCellData()->AddArray(tensorsArray);
 }

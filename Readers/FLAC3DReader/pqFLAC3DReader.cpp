@@ -53,7 +53,7 @@ void pqFLAC3DReader::selectDispFile()
 	filters += "Displacement Vectors File (*.txt)";
 
 	pqFileDialog *fileDialog = new pqFileDialog(NULL,
-		this, tr("Open Displacement Vectors File:"), path, filters);
+		this, tr("Open Displacement Vectors File:"), QString(), filters);
 	fileDialog->setObjectName("FileDialogOpenDisp");
 	fileDialog->setFileMode(pqFileDialog::ExistingFile);
 
@@ -75,7 +75,7 @@ void pqFLAC3DReader::selectScalarsFile()
 	filters += "Zones Scalars File (*.txt)";
 
 	pqFileDialog *fileDialog = new pqFileDialog(NULL,
-		this, tr("Open Zones Scalars File:"), path, filters);
+		this, tr("Open Zones Scalars File:"), QString(), filters);
 	fileDialog->setObjectName("FileDialogOpenScalars");
 	fileDialog->setFileMode(pqFileDialog::ExistingFile);
 
@@ -97,8 +97,9 @@ void pqFLAC3DReader::selectTensorsFile()
 	QString filters;
 	filters += "Zones Tensors File (*.txt)";
 
+	
 	pqFileDialog *fileDialog = new pqFileDialog(NULL,
-		this, tr("Open Zones Tensors File:"), path, filters);
+		this, tr("Open Zones Tensors File:"), QString(), filters);
 	fileDialog->setObjectName("FileDialogOpenTensors");
 	fileDialog->setFileMode(pqFileDialog::ExistingFile);
 

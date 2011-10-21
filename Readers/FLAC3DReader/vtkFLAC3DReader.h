@@ -50,6 +50,7 @@ protected:
 
   void importDisplacements(vtkUnstructuredGrid* output);
   void importScalars(vtkUnstructuredGrid* output);
+  void importTensors(vtkUnstructuredGrid *output);
 
 	const char* FileName; 
 	char* DisplacementVectorsFile;
