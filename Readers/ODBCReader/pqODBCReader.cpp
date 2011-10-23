@@ -214,9 +214,10 @@ pqODBCReader::~pqODBCReader()
 
 		int nProps = this->propTableWidgets[it.key()]->rowCount();
 
-		for(int i=0; i<nProps*3; ++i)
+		for(int i=0; i<nProps; i+=3)
 		{
 			delete[] it.value()[i];
+			delete[] it.value()[i+1];
 		}
 		
 	}
@@ -279,6 +280,8 @@ void pqODBCReader::onTableSelectionChanged(int index)
 		this->propDW->setWindowTitle("properties");
 		this->propDW->setWidget(NULL);
 	}
+
+	this->updatePyPzIndexes(this->Px->currentIndex());
 }
 
 //________________________________________________________________________

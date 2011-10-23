@@ -19,6 +19,8 @@
 #include <vtkODBCDatabase.h>
 #include <vtkstd/map>
 
+#include "StringUtilities.h"
+
 
 //----------------------------------------------------------------------------
 struct Internal
@@ -105,18 +107,40 @@ int vtkODBCReader::RequestInformation(vtkInformation* request,
 		return 0;
 	}
 
+	ifstream inFile;
+	inFile.open(this->FileName, ios::in);
+	if(!inFile)
+	{
+		vtkErrorMacro("File Error: cannot open file: "<< this->FileName);
+		return 0;
+	}
+
+	string line;
+	vector<string> lineSplit;
+	getline(inFile, line);
+
+	StringUtilities::split(line, lineSplit, ":");
+	this->dataSourceName = lineSplit[1];
+
+	getline(inFile, line);
+	StringUtilities::split(line, lineSplit, ":");
+	this->username = lineSplit[1];
+
+	getline(inFile, line);
+	StringUtilities::split(line, lineSplit, ":");
+	this->password = lineSplit[1];
+
+	inFile.close();
+
 	//Create Database object
 	vtkODBCDatabase* db = vtkODBCDatabase::New();
 
-	vtkStdString dataSourceName = "DRIVER={Oracle in XE};DATA SOURCE=ODBC_SIGG;";
-
 	//Set the data source name. Do not include the user id or password in this string. 
-	//They are set with separate functions.
-	db->SetDataSourceName(dataSourceName.c_str()); 
-	db->SetUserName("codelco");
-	db->SetPassword("codelco");
+	//They are set withtt separate functions.
+	db->SetDataSourceName(this->dataSourceName.c_str()); 
+	db->SetUserName(this->username.c_str());
 
-	bool status = db->Open("codelco");
+	bool status = db->Open(this->password.c_str());
 
 	if ( ! status )
 	{
@@ -232,15 +256,10 @@ int vtkODBCReader::RequestData(vtkInformation* request,
 	//Create Database object
 	vtkODBCDatabase* db = vtkODBCDatabase::New();
 
-	vtkStdString dataSourceName = "DRIVER={Oracle in XE};DATA SOURCE=ODBC_SIGG;";
+	db->SetDataSourceName(this->dataSourceName.c_str()); 
+	db->SetUserName(this->username.c_str());
 
-	//Set the data source name. Do not include the user id or password in this string. 
-	//They are set with separate functions.
-	db->SetDataSourceName(dataSourceName.c_str()); 
-	db->SetUserName("codelco");
-	//db->SetPassword("codelco");
-
-	bool status = db->Open("codelco");
+	bool status = db->Open(this->password.c_str());
 
 	if ( ! status )
 	{
@@ -282,7 +301,7 @@ int vtkODBCReader::RequestData(vtkInformation* request,
 			{
 				vtkStringArray* stringArray = vtkStringArray::New();
 				stringArray->SetName(finder->first.c_str());
-				this->internals->stringArrayMap[j] = NULL;
+				this->internals->stringArrayMap[j] = stringArray;
 			}
 			else
 			{
@@ -308,40 +327,30 @@ int vtkODBCReader::RequestData(vtkInformation* request,
 	vtkPoints* outPoints = vtkPoints::New();
 	vtkCellArray* outVerts = vtkCellArray::New();
 
-	//vtkVariantArray* vArray = vtkVariantArray::New();
-	while(sqlQuery->NextRow(/*vArray*/))
+	vtkVariantArray* vArray = vtkVariantArray::New();
+	while(sqlQuery->NextRow(vArray))
 	{
-		//for(vtkstd::map<int, vtkIntArray*>::iterator it = this->internals->intArrayMap.begin();
-		//	it != this->internals->intArrayMap.end(); ++it)
-		//{
-		//	it->second->InsertNextValue(vArray->GetValue(it->first).ToInt());
-		//}
-		//for(vtkstd::map<int, vtkDoubleArray*>::iterator it = this->internals->doubleArrayMap.begin();
-		//	it != this->internals->doubleArrayMap.end(); ++it)
-		//{
-		//	it->second->InsertNextValue(vArray->GetValue(it->first).ToDouble());
-		//}
-		//for(vtkstd::map<int, vtkStringArray*>::iterator it = this->internals->stringArrayMap.begin();
-		//	it != this->internals->stringArrayMap.end(); ++it)
-		//{
-		//	it->second->InsertNextValue(vArray->GetValue(it->first).ToString());
-		//}
+		for(vtkstd::map<int, vtkIntArray*>::iterator it = this->internals->intArrayMap.begin();
+			it != this->internals->intArrayMap.end(); ++it)
+		{
+			it->second->InsertNextValue(vArray->GetValue(it->first).ToInt());
+		}
+		for(vtkstd::map<int, vtkDoubleArray*>::iterator it = this->internals->doubleArrayMap.begin();
+			it != this->internals->doubleArrayMap.end(); ++it)
+		{
+			it->second->InsertNextValue(vArray->GetValue(it->first).ToDouble());
+		}
+		for(vtkstd::map<int, vtkStringArray*>::iterator it = this->internals->stringArrayMap.begin();
+			it != this->internals->stringArrayMap.end(); ++it)
+		{
+			it->second->InsertNextValue(vArray->GetValue(it->first).ToString());
+		}
 
 		double pt[3];
-
-		//bool ok;
-		//std::stringstream ss;
-		//vArray->Print(ss);
-		//vtkWarningMacro("vArray: " << ss.str());
-		//vtkWarningMacro("vArray nComponents: " << vArray->GetNumberOfComponents() 
-		//	<< " nValues " << vArray->GetNumberOfValues());
-		//vtkWarningMacro(""	<< vArray->GetValue(xPos).GetTypeAsString() << " " 
-		//					<< vArray->GetValue(yPos).GetTypeAsString() << " " 
-		//					<< vArray->GetValue(zPos).GetTypeAsString());
 		
-		//pt[0] = vArray->GetValue(xPos).ToInt();
-		//pt[1] = vArray->GetValue(yPos).ToInt();
-		//pt[2] = vArray->GetValue(zPos).ToInt();
+		pt[0] = vArray->GetValue(xPos).ToDouble();
+		pt[1] = vArray->GetValue(yPos).ToDouble();
+		pt[2] = vArray->GetValue(zPos).ToDouble();
 
 		vtkWarningMacro("" << sqlQuery->DataValue(0).GetTypeAsString() << " " <<
 						//sqlQuery->DataValue(0).GetType << " " << 
@@ -357,16 +366,16 @@ int vtkODBCReader::RequestData(vtkInformation* request,
 		ok = sqlQuery->DataValue(3).IsValid();
 		ok = sqlQuery->DataValue(4).IsValid();
 
-		pt[0] = sqlQuery->DataValue(xPos).ToInt();
-		pt[1] = sqlQuery->DataValue(yPos).ToInt();
-		pt[2] = sqlQuery->DataValue(zPos).ToInt();
+		pt[0] = sqlQuery->DataValue(xPos).ToDouble();
+		pt[1] = sqlQuery->DataValue(yPos).ToDouble();
+		pt[2] = sqlQuery->DataValue(zPos).ToDouble();
 
 
 		vtkIdType pid = outPoints->InsertNextPoint(pt);
 		outVerts->InsertNextCell(1);
 		outVerts->InsertCellPoint(pid);
 	}
-	//vArray->Delete();
+	vArray->Delete();
 
 	output->SetPoints(outPoints);
 	output->SetVerts(outVerts);

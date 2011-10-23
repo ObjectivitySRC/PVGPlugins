@@ -17,6 +17,7 @@ database.
 
 #include <vtksys/ios/sstream>
 #include "vtkPolyDataAlgorithm.h"
+#include <vtkStdString.h>
 
 struct Internal;
 
@@ -82,6 +83,10 @@ private:
 	bool guiLoaded;
 
 	Internal *internals;
+
+	vtkStdString dataSourceName;
+	vtkStdString username;
+	vtkStdString password;
 };
 
 #endif

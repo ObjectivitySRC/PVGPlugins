@@ -18,6 +18,9 @@ ADD_PARAVIEW_PLUGIN(ODBCReaderClientPlugin "1.0"
 
 ADD_PARAVIEW_PLUGIN(ODBCReaderServerManagerPlugin "1.0"
 	SERVER_MANAGER_XML ODBCReader.xml
-	SERVER_MANAGER_SOURCES vtkODBCReader.cpp)
+	SERVER_MANAGER_SOURCES vtkODBCReader.cpp
+	SERVER_SOURCES ../../common/StringUtilities.cpp)
+	
+INCLUDE_DIRECTORIES(../../common)	
 
 target_link_libraries(ODBCReaderServerManagerPlugin)
