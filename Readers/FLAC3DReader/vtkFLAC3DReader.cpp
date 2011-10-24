@@ -418,8 +418,8 @@ void vtkFLAC3DReader::importTensors(vtkUnstructuredGrid *output)
 	tensorsArray->SetName("tensors(Pa)");
 	tensorsArray->SetNumberOfComponents(9);
 	
-	tensorsArray->SetNumberOfTuples(output->GetNumberOfPoints());
-	for(vtkIdType i=0; i<output->GetNumberOfPoints(); ++i)
+	tensorsArray->SetNumberOfTuples(output->GetNumberOfCells());
+	for(vtkIdType i=0; i<output->GetNumberOfCells(); ++i)
 	{
 		tensorsArray->SetTuple9(i,0,0,0,0,0,0,0,0,0);
 	}
