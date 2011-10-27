@@ -89,6 +89,8 @@ int vtkODBCReader::RequestInformation(vtkInformation* request,
 									  vtkInformationVector** inputVector,
 									  vtkInformationVector* outputVector)
 {
+	return 1;
+
 	// We only need to parse the headers before loading the GUI
 	if(this->guiLoaded)
 	{
@@ -129,6 +131,22 @@ int vtkODBCReader::RequestInformation(vtkInformation* request,
 	getline(inFile, line);
 	StringUtilities::split(line, lineSplit, ":");
 	this->password = lineSplit[1];
+
+	getline(inFile, line);
+	StringUtilities::split(line, lineSplit, ":");
+	this->ActiveTable = (char*)lineSplit[1].c_str();
+
+	getline(inFile, line);
+	StringUtilities::split(line, lineSplit, ":");
+	this->Px = (char*)lineSplit[1].c_str();
+
+	getline(inFile, line);
+	StringUtilities::split(line, lineSplit, ":");
+	this->Py = (char*)lineSplit[1].c_str();
+
+	getline(inFile, line);
+	StringUtilities::split(line, lineSplit, ":");
+	this->Pz = (char*)lineSplit[1].c_str();
 
 	inFile.close();
 
@@ -240,18 +258,53 @@ int vtkODBCReader::RequestData(vtkInformation* request,
 		return 0;
 	}
 	if(strlen(this->FileName)==0)  {
-		vtkErrorMacro("File name is null.  Cannot open.");
+		vtkErrorMacro("File name is null. Cannot open.");
 		return 0;
 	}
 
-
-	ifstream file;
-	file.open(this->FileName, ios::in);
-	if(!file)
+	ifstream inFile;
+	inFile.open(this->FileName, ios::in);
+	if(!inFile)
 	{
 		vtkErrorMacro("File Error: cannot open file: "<< this->FileName);
 		return 0;
 	}
+
+	string line;
+	vector<string> lineSplit;
+	getline(inFile, line);
+
+	StringUtilities::split(line, lineSplit, ":");
+	this->dataSourceName = lineSplit[1];
+
+	getline(inFile, line);
+	StringUtilities::split(line, lineSplit, ":");
+	this->username = lineSplit[1];
+
+	getline(inFile, line);
+	StringUtilities::split(line, lineSplit, ":");
+	this->password = lineSplit[1];
+
+	vector<string> lineSplit2;
+	getline(inFile, line);
+	StringUtilities::split(line, lineSplit2, ":");
+	this->ActiveTable = (char*)lineSplit2[1].c_str();
+
+	vector<string> lineSplit3;
+	getline(inFile, line);
+	StringUtilities::split(line, lineSplit3, ":");
+	this->Px = (char*)lineSplit3[1].c_str();
+
+	vector<string> lineSplit4;
+	getline(inFile, line);
+	StringUtilities::split(line, lineSplit4, ":");
+	this->Py = (char*)lineSplit4[1].c_str();
+
+	vector<string> lineSplit5;
+	getline(inFile, line);
+	StringUtilities::split(line, lineSplit5, ":");
+	this->Pz = (char*)lineSplit5[1].c_str();
+
 
 	//Create Database object
 	vtkODBCDatabase* db = vtkODBCDatabase::New();
@@ -279,35 +332,35 @@ int vtkODBCReader::RequestData(vtkInformation* request,
 
 	for(int j=0; j<sqlQuery->GetNumberOfFields(); ++j)
 	{
-		vtkWarningMacro("field type " << sqlQuery->GetFieldType(j));
+		//vtkWarningMacro("field type " << sqlQuery->GetFieldType(j));
 		vtkStdString fieldName = sqlQuery->GetFieldName(j);
-		vtkstd::map<vtkStdString, vtkStdString>::iterator finder;
-		finder = this->internals->activeProps.find(fieldName);
-		if(finder != this->internals->activeProps.end())
-		{
-			if(finder->second == "int")
-			{
-				vtkIntArray* intArray = vtkIntArray::New();
-				intArray->SetName(finder->first.c_str());
-				this->internals->intArrayMap[j] = intArray;
-			}
-			else if(finder->second == "float" || finder->second == "double")
-			{
-				vtkDoubleArray* doubleArray = vtkDoubleArray::New();
-				doubleArray->SetName(finder->first.c_str());
-				this->internals->doubleArrayMap[j] = doubleArray;
-			}
-			else if(finder->second == "string")
-			{
-				vtkStringArray* stringArray = vtkStringArray::New();
-				stringArray->SetName(finder->first.c_str());
-				this->internals->stringArrayMap[j] = stringArray;
-			}
-			else
-			{
-				vtkErrorMacro("Unsupported property type " << finder->first << ":" << finder->second);
-			}
-		}
+		//vtkstd::map<vtkStdString, vtkStdString>::iterator finder;
+		//finder = this->internals->activeProps.find(fieldName);
+		//if(finder != this->internals->activeProps.end())
+		//{
+		//	if(finder->second == "int")
+		//	{
+		//		vtkIntArray* intArray = vtkIntArray::New();
+		//		intArray->SetName(finder->first.c_str());
+		//		this->internals->intArrayMap[j] = intArray;
+		//	}
+		//	else if(finder->second == "float" || finder->second == "double")
+		//	{
+		//		vtkDoubleArray* doubleArray = vtkDoubleArray::New();
+		//		doubleArray->SetName(finder->first.c_str());
+		//		this->internals->doubleArrayMap[j] = doubleArray;
+		//	}
+		//	else if(finder->second == "string")
+		//	{
+		//		vtkStringArray* stringArray = vtkStringArray::New();
+		//		stringArray->SetName(finder->first.c_str());
+		//		this->internals->stringArrayMap[j] = stringArray;
+		//	}
+		//	else
+		//	{
+		//		vtkErrorMacro("Unsupported property type " << finder->first << ":" << finder->second);
+		//	}
+		//}
 
 		if(fieldName == vtkStdString(this->Px))
 		{
@@ -330,21 +383,21 @@ int vtkODBCReader::RequestData(vtkInformation* request,
 	vtkVariantArray* vArray = vtkVariantArray::New();
 	while(sqlQuery->NextRow(vArray))
 	{
-		for(vtkstd::map<int, vtkIntArray*>::iterator it = this->internals->intArrayMap.begin();
-			it != this->internals->intArrayMap.end(); ++it)
-		{
-			it->second->InsertNextValue(vArray->GetValue(it->first).ToInt());
-		}
-		for(vtkstd::map<int, vtkDoubleArray*>::iterator it = this->internals->doubleArrayMap.begin();
-			it != this->internals->doubleArrayMap.end(); ++it)
-		{
-			it->second->InsertNextValue(vArray->GetValue(it->first).ToDouble());
-		}
-		for(vtkstd::map<int, vtkStringArray*>::iterator it = this->internals->stringArrayMap.begin();
-			it != this->internals->stringArrayMap.end(); ++it)
-		{
-			it->second->InsertNextValue(vArray->GetValue(it->first).ToString());
-		}
+		//for(vtkstd::map<int, vtkIntArray*>::iterator it = this->internals->intArrayMap.begin();
+		//	it != this->internals->intArrayMap.end(); ++it)
+		//{
+		//	it->second->InsertNextValue(vArray->GetValue(it->first).ToInt());
+		//}
+		//for(vtkstd::map<int, vtkDoubleArray*>::iterator it = this->internals->doubleArrayMap.begin();
+		//	it != this->internals->doubleArrayMap.end(); ++it)
+		//{
+		//	it->second->InsertNextValue(vArray->GetValue(it->first).ToDouble());
+		//}
+		//for(vtkstd::map<int, vtkStringArray*>::iterator it = this->internals->stringArrayMap.begin();
+		//	it != this->internals->stringArrayMap.end(); ++it)
+		//{
+		//	it->second->InsertNextValue(vArray->GetValue(it->first).ToString());
+		//}
 
 		double pt[3];
 		
@@ -352,23 +405,23 @@ int vtkODBCReader::RequestData(vtkInformation* request,
 		pt[1] = vArray->GetValue(yPos).ToDouble();
 		pt[2] = vArray->GetValue(zPos).ToDouble();
 
-		vtkWarningMacro("" << sqlQuery->DataValue(0).GetTypeAsString() << " " <<
-						//sqlQuery->DataValue(0).GetType << " " << 
-						sqlQuery->DataValue(1).GetTypeAsString() << " " <<
-						//sqlQuery->DataValue(1).GetType() << " " <<
-						sqlQuery->DataValue(2).GetTypeAsString() << " " //<<
-						//sqlQuery->DataValue(2).GetType()
-						);
+		//vtkWarningMacro("" << sqlQuery->DataValue(0).GetTypeAsString() << " " <<
+		//				//sqlQuery->DataValue(0).GetType << " " << 
+		//				sqlQuery->DataValue(1).GetTypeAsString() << " " <<
+		//				//sqlQuery->DataValue(1).GetType() << " " <<
+		//				sqlQuery->DataValue(2).GetTypeAsString() << " " //<<
+		//				//sqlQuery->DataValue(2).GetType()
+		//				);
 
-		bool ok = sqlQuery->DataValue(0).IsValid();
-		ok = sqlQuery->DataValue(1).IsValid();
-		ok = sqlQuery->DataValue(2).IsValid();
-		ok = sqlQuery->DataValue(3).IsValid();
-		ok = sqlQuery->DataValue(4).IsValid();
+		//bool ok = sqlQuery->DataValue(0).IsValid();
+		//ok = sqlQuery->DataValue(1).IsValid();
+		//ok = sqlQuery->DataValue(2).IsValid();
+		//ok = sqlQuery->DataValue(3).IsValid();
+		//ok = sqlQuery->DataValue(4).IsValid();
 
-		pt[0] = sqlQuery->DataValue(xPos).ToDouble();
-		pt[1] = sqlQuery->DataValue(yPos).ToDouble();
-		pt[2] = sqlQuery->DataValue(zPos).ToDouble();
+		//pt[0] = sqlQuery->DataValue(xPos).ToDouble();
+		//pt[1] = sqlQuery->DataValue(yPos).ToDouble();
+		//pt[2] = sqlQuery->DataValue(zPos).ToDouble();
 
 
 		vtkIdType pid = outPoints->InsertNextPoint(pt);
@@ -380,24 +433,24 @@ int vtkODBCReader::RequestData(vtkInformation* request,
 	output->SetPoints(outPoints);
 	output->SetVerts(outVerts);
 
-	for(vtkstd::map<int, vtkIntArray*>::iterator it = this->internals->intArrayMap.begin();
-		it != this->internals->intArrayMap.end(); ++it)
-	{
-		output->GetPointData()->AddArray(it->second);
-		it->second->Delete();
-	}
-	for(vtkstd::map<int, vtkDoubleArray*>::iterator it = this->internals->doubleArrayMap.begin();
-		it != this->internals->doubleArrayMap.end(); ++it)
-	{
-		output->GetPointData()->AddArray(it->second);
-		it->second->Delete();
-	}
-	for(vtkstd::map<int, vtkStringArray*>::iterator it = this->internals->stringArrayMap.begin();
-		it != this->internals->stringArrayMap.end(); ++it)
-	{
-		output->GetPointData()->AddArray(it->second);
-		it->second->Delete();
-	}
+	//for(vtkstd::map<int, vtkIntArray*>::iterator it = this->internals->intArrayMap.begin();
+	//	it != this->internals->intArrayMap.end(); ++it)
+	//{
+	//	output->GetPointData()->AddArray(it->second);
+	//	it->second->Delete();
+	//}
+	//for(vtkstd::map<int, vtkDoubleArray*>::iterator it = this->internals->doubleArrayMap.begin();
+	//	it != this->internals->doubleArrayMap.end(); ++it)
+	//{
+	//	output->GetPointData()->AddArray(it->second);
+	//	it->second->Delete();
+	//}
+	//for(vtkstd::map<int, vtkStringArray*>::iterator it = this->internals->stringArrayMap.begin();
+	//	it != this->internals->stringArrayMap.end(); ++it)
+	//{
+	//	output->GetPointData()->AddArray(it->second);
+	//	it->second->Delete();
+	//}
 
 	db->Delete();
 	this->internals->activeProps.clear();

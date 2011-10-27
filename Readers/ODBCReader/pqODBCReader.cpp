@@ -47,8 +47,10 @@ bool isNumeric(std::string value)
 
 //________________________________________________________________________
 pqODBCReader::pqODBCReader(pqProxy* pxy, QWidget* p)
-: pqLoadedFormObjectPanel(":/PVGReaders/pqODBCReader.ui", pxy, p)
+: pqLoadedFormObjectPanel(":/PVGReaders/ODBCReader/pqODBCReader.ui.disable", pxy, p)
 {
+	return;
+
 	this->cb_tables = this->findChild<QComboBox*>("ActiveTable");
 	this->cb_tablesType = this->findChild<QComboBox*>("ActiveTableType");
 	this->propDW = this->findChild<QDockWidget*>("dwProps");
@@ -201,6 +203,7 @@ pqODBCReader::pqODBCReader(pqProxy* pxy, QWidget* p)
 //________________________________________________________________________
 pqODBCReader::~pqODBCReader()
 {
+	return;
 	QMapIterator<QString, const char**> it(this->propsMap);
 	while (it.hasNext()) 
 	{
@@ -227,6 +230,9 @@ pqODBCReader::~pqODBCReader()
 //________________________________________________________________________
 void pqODBCReader::accept()
 {
+	pqLoadedFormObjectPanel::accept();
+	return;
+
 	int nProps = 3*this->propTableWidgets[this->cb_tables->currentText()]->rowCount();
 
 	this->QVTKConnect->Disconnect();
@@ -235,7 +241,7 @@ void pqODBCReader::accept()
 	this->QVTKConnect->Connect(this->serverSideProperties, vtkCommand::ModifiedEvent,
 		this, SLOT(updateTable()));
 
-	pqLoadedFormObjectPanel::accept();
+	
 }
 
 

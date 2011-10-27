@@ -30,15 +30,20 @@ DXFReader
 Ellipsoid
 #EPSReader
 FDEM
+FLAC3DReader
+3DECReader
 GocadReader
 GXFReader
 Map3dBlockReader
+#ODBCReader
 PointSetReader
 SGeMSReader
 ShapeFileReader
 SOTResult
 TriReader
 LineNetworkReader
+
+../common
 )
 
 # Only include directories if on Windows platform
@@ -68,6 +73,8 @@ Ellipsoid/vtkEllipsoid.cxx
 Ellipsoid/vtkElliptic.cxx
 #EPSReader/vtkEPSReader.cxx
 FDEM/vtkFDEMReader.cxx
+FLAC3DReader/vtkFLAC3DReader.cpp
+3DECReader/vtk3DECReader.cpp
 GocadReader/vtkGocadReader.cxx 
 GocadReader/vtkGocadAtomic.cxx 
 GocadReader/vtkGocadTSurf.cxx 
@@ -78,6 +85,7 @@ GocadReader/vtkGocadVoxet.cxx
 GocadReader/vtkGocadSGrid.cxx
 GXFReader/vtkGXFReader.cxx
 Map3dBlockReader/vtkMap3dBlockReader.cxx
+#ODBCReader/vtkODBCReader.cpp
 PointSetReader/vtkPointSetReader.cpp
 SGeMSReader/vtkSGeMSReader.cxx
 SGeMSReader/vtkSGeMSCgridReader.cxx
@@ -111,7 +119,6 @@ IF(PV_WIN32)
 ENDIF(PV_WIN32)
 
 SET( PVGReaders_EXTRA_SRCS
-../common/StringUtilities.h
 DataMineReader/dmfile.cxx
 DataMineReader/PropertyStorage.cxx
 DataMineReader/PointMap.cxx
@@ -132,13 +139,18 @@ ShapeFileReader/hgrid.cxx
 ShapeFileReader/hpolygon.cxx
 ShapeFileReader/mgconst.cxx
 ShapeFileReader/mgexcept.cxx
+
+../common/StringUtilities.cpp
 )
 
 SET(PVGReaders_GUI_SRCS
 DataMineReader/pqDataMineWireFrameReader.cxx
 DrillHoleReader/pqDrillHoleReader.cxx
 #EPSReader/pqEPSReader.cxx
+FLAC3DReader/pqFLAC3DReader.cpp
+3DECReader/pq3DECReader.cpp
 GocadReader/pqGocadReader.cxx
+#ODBCReader/pqODBCReader.cpp
 PointSetReader/pqPointSetReader.cxx
 SOTResult/pqSOTResult.cxx
 LineNetworkReader/pqLineNetworkReader.cxx
@@ -148,7 +160,10 @@ SET(MOC_LIST
 DataMineReader/pqDataMineWireFrameReader.h
 DrillHoleReader/pqDrillHoleReader.h
 #EPSReader/pqEPSReader.h
+FLAC3DReader/pqFLAC3DReader.h
+3DECReader/pq3DECReader.h
 GocadReader/pqGocadReader.h
+#ODBCReader/pqODBCReader.h
 PointSetReader/pqPointSetReader.h
 SOTResult/pqSOTResult.h
 LineNetworkReader/pqLineNetworkReader.h
@@ -190,8 +205,17 @@ ADD_PARAVIEW_OBJECT_PANEL(IFACES5 IFACE_SRCS5 CLASS_NAME pqPointSetReader
 ADD_PARAVIEW_OBJECT_PANEL(IFACES6 IFACE_SRCS6 CLASS_NAME pqGocadReader
                          XML_NAME GocadReader XML_GROUP sources)	
 
-ADD_PARAVIEW_OBJECT_PANEL(IFACES IFACE_SRCS CLASS_NAME pqLineNetworkReader
-                         XML_NAME LineNetworkReader XML_GROUP sources)						 
+ADD_PARAVIEW_OBJECT_PANEL(IFACES7 IFACE_SRCS7 CLASS_NAME pqLineNetworkReader
+                         XML_NAME LineNetworkReader XML_GROUP sources)		
+
+#ADD_PARAVIEW_OBJECT_PANEL(IFACES8 IFACE_SRCS8 CLASS_NAME pqODBCReader
+#                         XML_NAME ODBCReader XML_GROUP sources)		
+
+ADD_PARAVIEW_OBJECT_PANEL(IFACES9 IFACE_SRCS9 CLASS_NAME pqFLAC3DReader
+                         XML_NAME FLAC3DReader XML_GROUP sources)				
+
+ADD_PARAVIEW_OBJECT_PANEL(IFACES10 IFACE_SRCS10 CLASS_NAME pq3DECReader
+                         XML_NAME 3DECReader XML_GROUP sources)																 
 
 # Only add GeoTiff if on Windows
 IF(PV_WIN32)
@@ -215,6 +239,17 @@ LIST(APPEND IFACE_SRCS ${IFACE_SRCS5})
 LIST(APPEND IFACES ${IFACES6})
 LIST(APPEND IFACE_SRCS ${IFACE_SRCS6})
 
+LIST(APPEND IFACES ${IFACES7})
+LIST(APPEND IFACE_SRCS ${IFACE_SRCS7})
+
+#LIST(APPEND IFACES ${IFACES8})
+#LIST(APPEND IFACE_SRCS ${IFACE_SRCS8})
+
+LIST(APPEND IFACES ${IFACES9})
+LIST(APPEND IFACE_SRCS ${IFACE_SRCS9})
+
+LIST(APPEND IFACES ${IFACES10})
+LIST(APPEND IFACE_SRCS ${IFACE_SRCS10})
 
 ADD_PARAVIEW_PLUGIN(PVGReadersSMPlugin "1.0"
 			SERVER_MANAGER_XML ReadersSM.xml
