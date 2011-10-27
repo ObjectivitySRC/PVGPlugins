@@ -16,7 +16,17 @@
 #include <vtkPointData.h>
 #include <vtkCellData.h>
 
+#include <map>
+
 #include "StringUtilities.h"
+
+using std::map;
+
+namespace
+{
+	map < vtkIdType, vtkIdType > pidMap;
+	map < vtkIdType, vtkIdType > cidMap;
+}
 
 
 vtkCxxRevisionMacro(vtkFLAC3DReader, "$Revision: 1.1 $");
@@ -95,6 +105,9 @@ int vtkFLAC3DReader::RequestData(vtkInformation* request,
 	string line;
 	vector<string> lineSplit;
 
+	pidMap.clear();
+	cidMap.clear();
+
 	// skip the headers
 	while(!inFile.eof())
 	{
@@ -117,7 +130,8 @@ int vtkFLAC3DReader::RequestData(vtkInformation* request,
 		pt[1] = atof(lineSplit[3].c_str());
 		pt[2] = atof(lineSplit[4].c_str());
 
-		outPoints->InsertNextPoint(pt);
+		vtkIdType newId = outPoints->InsertNextPoint(pt);
+		pidMap[id] = newId;
 
 		if(inFile.eof()) break;
 
@@ -149,16 +163,58 @@ int vtkFLAC3DReader::RequestData(vtkInformation* request,
 			vtkIdType id = atoi(lineSplit[2].c_str());
 
 			// see FLAC3D documentation for hexahedron topology
-			ids[0] = atoi(lineSplit[3].c_str()) -1;
-			ids[1] = atoi(lineSplit[4].c_str()) -1;
-			ids[2] = atoi(lineSplit[7].c_str()) -1;
-			ids[3] = atoi(lineSplit[5].c_str()) -1;
-			ids[4] = atoi(lineSplit[6].c_str()) -1;
-			ids[5] = atoi(lineSplit[9].c_str()) -1;
-			ids[6] = atoi(lineSplit[10].c_str()) -1;
-			ids[7] = atoi(lineSplit[8].c_str()) -1;
+			ids[0] = atoi(lineSplit[3].c_str());
+			ids[1] = atoi(lineSplit[4].c_str());
+			ids[2] = atoi(lineSplit[7].c_str());
+			ids[3] = atoi(lineSplit[5].c_str());
+			ids[4] = atoi(lineSplit[6].c_str());
+			ids[5] = atoi(lineSplit[9].c_str());
+			ids[6] = atoi(lineSplit[10].c_str());
+			ids[7] = atoi(lineSplit[8].c_str());
 
-			temp->InsertNextCell(VTK_HEXAHEDRON,8,ids);
+			map <vtkIdType, vtkIdType>::iterator it;
+			it = pidMap.find(ids[0]);
+			if(it == pidMap.end())
+				throw("point id missing, topology can't be created");
+			ids[0] = it->second;
+
+			it = pidMap.find(ids[1]);
+			if(it == pidMap.end())
+				throw("point id missing, topology can't be created");
+			ids[1] = it->second;
+
+			it = pidMap.find(ids[2]);
+			if(it == pidMap.end())
+				throw("point id missing, topology can't be created");
+			ids[2] = it->second;
+
+			it = pidMap.find(ids[3]);
+			if(it == pidMap.end())
+				throw("point id missing, topology can't be created");
+			ids[3] = it->second;
+
+			it = pidMap.find(ids[4]);
+			if(it == pidMap.end())
+				throw("point id missing, topology can't be created");
+			ids[4] = it->second;
+
+			it = pidMap.find(ids[5]);
+			if(it == pidMap.end())
+				throw("point id missing, topology can't be created");
+			ids[5] = it->second;
+
+			it = pidMap.find(ids[6]);
+			if(it == pidMap.end())
+				throw("point id missing, topology can't be created");
+			ids[6] = it->second;
+
+			it = pidMap.find(ids[7]);
+			if(it == pidMap.end())
+				throw("point id missing, topology can't be created");
+			ids[7] = it->second;
+
+			vtkIdType newId = temp->InsertNextCell(VTK_HEXAHEDRON,8,ids);
+			cidMap[id] = newId;
 		}
 
 		if(inFile.eof()) break;
@@ -174,6 +230,7 @@ int vtkFLAC3DReader::RequestData(vtkInformation* request,
 
 	temp->SetPoints(outPoints);
 	output->ShallowCopy(temp);
+	temp->Delete();
 	outPoints->Delete();
 
 	if(line.size() == 0 || line[0] == '*' || inFile.eof())
@@ -181,19 +238,19 @@ int vtkFLAC3DReader::RequestData(vtkInformation* request,
 
 	vtkStringArray* groupNameArray = vtkStringArray::New();
 	groupNameArray->SetName("Group Name");
-	groupNameArray->SetNumberOfValues(temp->GetNumberOfCells());
+	groupNameArray->SetNumberOfValues(output->GetNumberOfCells());
 
 	vtkIntArray* groupIdArray = vtkIntArray::New();
 	groupIdArray->SetName("Group Id");
-	groupIdArray->SetNumberOfValues(temp->GetNumberOfCells());
+	groupIdArray->SetNumberOfValues(output->GetNumberOfCells());
 
 	// in case some zones doesn't belong to a group
 	// if it's sure that all zones belong to a group, this
 	// loop should be removed to save time
-	//for(vtkIdType i=0; i<temp->GetNumberOfCells(); ++i)
+	//for(vtkIdType i=0; i<output->GetNumberOfCells(); ++i)
 	//{
 	//	groupNameArray->SetValue(i, "");
-	//	groupIdArray->SetValue(i,0);
+	//	groupIdArray->SetValue(i,-1);
 	//}
 
 	int groupId = 0;
@@ -215,7 +272,14 @@ int vtkFLAC3DReader::RequestData(vtkInformation* request,
 			StringUtilities::split(line, lineSplit, " ");
 			for(vector<string>::iterator it = lineSplit.begin(); it != lineSplit.end(); ++it)
 			{
-				int zone = atoi(it->c_str()) -1;
+				int zone = atoi(it->c_str());
+
+				map <vtkIdType, vtkIdType>::iterator mit;
+				mit = cidMap.find(zone);
+				if(mit == cidMap.end())
+					throw("zone id missing does not exist");
+				zone = mit->second;
+
 				groupNameArray->SetValue(zone, groupName);
 				groupIdArray->SetValue(zone, groupId);
 			}
@@ -225,6 +289,9 @@ int vtkFLAC3DReader::RequestData(vtkInformation* request,
 
 	output->GetCellData()->AddArray(groupNameArray);
 	output->GetCellData()->AddArray(groupIdArray);
+
+	groupNameArray->Delete();
+	groupIdArray->Delete();
 
 	inFile.close();
 
@@ -285,10 +352,16 @@ void vtkFLAC3DReader::importDisplacements(vtkUnstructuredGrid *output)
 			continue;
 
 		StringUtilities::split(line, lineSplit, ";");
-		vtkIdType id = atoi(lineSplit[0].c_str()) - 1;
+		vtkIdType id = atoi(lineSplit[0].c_str());
 		double dispX = atof(lineSplit[1].c_str());
 		double dispY = atof(lineSplit[2].c_str());
 		double dispZ = atof(lineSplit[3].c_str());
+
+		map <vtkIdType, vtkIdType>::iterator it;
+		it = pidMap.find(id);
+		if(it == pidMap.end())
+			throw("point id not found");
+		id = it->second;
 
 		dispArray->SetTuple3(id, dispX, dispY, dispZ);
 	}
@@ -296,6 +369,7 @@ void vtkFLAC3DReader::importDisplacements(vtkUnstructuredGrid *output)
 	inFile.close();
 
 	output->GetPointData()->AddArray(dispArray);
+	dispArray->Delete();
 }
 
 //_________________________________________________________________________
@@ -366,7 +440,7 @@ void vtkFLAC3DReader::importScalars(vtkUnstructuredGrid *output)
 			continue;
 
 		StringUtilities::split(line, lineSplit, ";");
-		vtkIdType id = atoi(lineSplit[0].c_str()) - 1;
+		vtkIdType id = atoi(lineSplit[0].c_str());
 		double state = atof(lineSplit[1].c_str());
 		double cohesion = atof(lineSplit[2].c_str());
 		double friction = atof(lineSplit[3].c_str());
@@ -376,6 +450,12 @@ void vtkFLAC3DReader::importScalars(vtkUnstructuredGrid *output)
 			excavationYear = 9999;
 
 		double damage = atof(lineSplit[5].c_str());
+
+		map <vtkIdType, vtkIdType>::iterator it;
+		it = cidMap.find(id);
+		if(it == cidMap.end())
+			throw("zone id not found");
+		id = it->second;
 
 		stateArray->SetValue(id,state);
 		cohesionArray->SetValue(id,cohesion);
@@ -391,6 +471,12 @@ void vtkFLAC3DReader::importScalars(vtkUnstructuredGrid *output)
 	output->GetCellData()->AddArray(frictionArray);
 	output->GetCellData()->AddArray(excavationYearArray);
 	output->GetCellData()->AddArray(damageArray);
+
+	stateArray->Delete();
+	cohesionArray->Delete();
+	frictionArray->Delete();
+	excavationYearArray->Delete();
+	damageArray->Delete();
 }
 
 
@@ -442,7 +528,7 @@ void vtkFLAC3DReader::importTensors(vtkUnstructuredGrid *output)
 			continue;
 
 		StringUtilities::split(line, lineSplit, ";");
-		vtkIdType id = atoi(lineSplit[0].c_str()) - 1;
+		vtkIdType id = atoi(lineSplit[0].c_str());
 		double sxx = atof(lineSplit[1].c_str());
 		double syy = atof(lineSplit[2].c_str());
 		double szz = atof(lineSplit[3].c_str());
@@ -450,10 +536,17 @@ void vtkFLAC3DReader::importTensors(vtkUnstructuredGrid *output)
 		double sxz = atof(lineSplit[5].c_str());
 		double syz = atof(lineSplit[6].c_str());
 
+		map <vtkIdType, vtkIdType>::iterator it;
+		it = cidMap.find(id);
+		if(it == cidMap.end())
+			throw("zone id not found");
+		id = it->second;
+
 		tensorsArray->SetTuple9(id, sxx, sxy, sxz, sxy, syy, syz, sxz, syz, szz);
 	}
 
 	inFile.close();
 
 	output->GetCellData()->AddArray(tensorsArray);
+	tensorsArray->Delete();
 }

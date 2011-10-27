@@ -6,7 +6,7 @@
 
 //________________________________________________________________________
 pqFLAC3DReader::pqFLAC3DReader(pqProxy* pxy, QWidget* p)
-: pqLoadedFormObjectPanel(":/PVGReaders/pqFLAC3DReader.ui", pxy, p)
+: pqLoadedFormObjectPanel(":/PVGReaders/FLAC3DReader/pqFLAC3DReader.ui", pxy, p)
 {
 	this->dispFile = this->findChild<QLineEdit*>("DisplacementVectorsFile");
 	this->scalarsFile = this->findChild<QLineEdit*>("ZonesScalarsFile");

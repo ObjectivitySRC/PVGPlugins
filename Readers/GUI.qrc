@@ -1,9 +1,12 @@
 <RCC>
-    <qresource prefix="/PVGReaders" >
-        <file>DataMineReader/pqDMWireFrameReader.ui</file>
-        <file>DrillHoleReader/pqDrillHoleReader.ui</file>
-		<file>PointSetReader/pqPointSetReader.ui</file>
-        <file>SOTResult/pqSOTResult.ui</file>
-		<file>LineNetworkReader/pqLineNetworkReader.ui</file>
-    </qresource>
+  <qresource prefix="/PVGReaders">
+    <file>DataMineReader/pqDMWireFrameReader.ui</file>
+    <file>DrillHoleReader/pqDrillHoleReader.ui</file>
+    <file>PointSetReader/pqPointSetReader.ui</file>
+    <file>SOTResult/pqSOTResult.ui</file>
+    <file>LineNetworkReader/pqLineNetworkReader.ui</file>
+    <file>ODBCReader/pqODBCReader.ui</file>
+    <file>FLAC3DReader/pqFLAC3DReader.ui</file>
+    <file>3DECReader/pq3DECReader.ui</file>
+  </qresource>
 </RCC>

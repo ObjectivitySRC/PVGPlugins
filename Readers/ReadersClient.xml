@@ -92,10 +92,26 @@
   <Reader name="TriReader"
   extensions="tri TRI"
   file_description="Gemcom ASCII Files">
-  </Reader>
+  </Reader>
+
   <Reader name="LineNetworkReader"
     extensions="lnr"
     file_description="Line Network File">
   </Reader>
   
+   <Reader name="ODBCReader"
+    extensions="ODBC"
+    file_description="ODBC Database">
+  </Reader>
+
+  <Reader name="FLAC3DReader"
+    extensions="flac3d"
+    file_description="FLAC3D Grid File">
+  </Reader>
+
+  <Reader name="3DECReader"
+    extensions="3dec"
+    file_description="3DEC File">
+  </Reader>
+
 </ParaViewReaders>
