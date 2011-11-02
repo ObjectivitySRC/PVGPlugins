@@ -1049,7 +1049,14 @@
       </StringVectorProperty>	    
     </SourceProxy>
 
-	
+<SourceProxy name="OracleReader" class="vtkOracleReader">
+      <StringVectorProperty
+        name="FileName"
+        command="SetFileName"
+        number_of_elements="1">
+        <FileListDomain name="files"/>
+      </StringVectorProperty>   
+    </SourceProxy>	
 	
     <SourceProxy name="FLAC3DReader" class="vtkFLAC3DReader">
       <StringVectorProperty

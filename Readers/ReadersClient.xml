@@ -99,9 +99,14 @@
     file_description="Line Network File">
   </Reader>
   
-   <Reader name="ODBCReader"
+   <!--Reader name="ODBCReader"
     extensions="ODBC"
     file_description="ODBC Database">
+  </Reader-->
+  
+   <Reader name="OracleReader"
+    extensions="oracle"
+    file_description="Oracle Database">
   </Reader>
 
   <Reader name="FLAC3DReader"

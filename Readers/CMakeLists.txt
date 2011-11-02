@@ -6,6 +6,8 @@ IF(QT4_FOUND)
 
 INCLUDE(${QT_USE_FILE})
 
+
+
 INCLUDE_DIRECTORIES(
 ${VTK_INCLUDE_DIR}
 ${PARAVIEW_INCLUDE_DIRS}
@@ -36,6 +38,7 @@ GocadReader
 GXFReader
 Map3dBlockReader
 #ODBCReader
+OracleReader
 PointSetReader
 SGeMSReader
 ShapeFileReader
@@ -44,7 +47,10 @@ TriReader
 LineNetworkReader
 
 ../common
+
 )
+
+
 
 # Only include directories if on Windows platform
 IF(PV_WIN32)
@@ -86,6 +92,7 @@ GocadReader/vtkGocadSGrid.cxx
 GXFReader/vtkGXFReader.cxx
 Map3dBlockReader/vtkMap3dBlockReader.cxx
 #ODBCReader/vtkODBCReader.cpp
+OracleReader/vtkOracleReader.cpp
 PointSetReader/vtkPointSetReader.cpp
 SGeMSReader/vtkSGeMSReader.cxx
 SGeMSReader/vtkSGeMSCgridReader.cxx
@@ -265,6 +272,22 @@ ADD_PARAVIEW_PLUGIN(PVGReadersGUIPlugin "1.0"
 
 ADD_PARAVIEW_PLUGIN(PVGReadersCPlugin "1.0"
 	GUI_RESOURCE_FILES ReadersClient.xml)
+	
+##############################################################
+# Oracle Reader
+OPTION(OracleReader_Build "Build Oracle Reader Plugin" OFF)
+IF (OracleReader_Build)
+	set(ORACLE_LIB "C:/"
+	CACHE PATH "Select the ORACLE lib")
+	target_link_libraries (PVGReadersSMPlugin ${ORACLE_LIB} )	
+	
+	set(ORACLE_INCLUDE_DIR "C:/"
+	CACHE PATH "Select the ORACLE include directory")
+	INCLUDE_DIRECTORIES(${ORACLE_INCLUDE_DIR})
+	
+	
+ENDIF (OracleReader_Build)
+##############################################################	
 
 #CPACK CODE TO BUNDLE THE DLLS CORRECTLY
 INSTALL(TARGETS PVGReadersSMPlugin PVGReadersGUIPlugin PVGReadersCPlugin
