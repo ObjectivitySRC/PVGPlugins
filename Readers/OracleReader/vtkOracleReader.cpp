@@ -55,11 +55,6 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 	vtkInformation *outInfo = outputVector->GetInformationObject(0);
 	vtkPolyData *output = vtkPolyData::SafeDownCast(outInfo->Get(vtkDataObject::DATA_OBJECT()));
 
-	Connection	*con;
-	Statement	*stmt;
-	Environment *env;
-	ResultSet	*res;
-
 	// open the <filename>.oracle parameters file
 	ifstream inFile;
 	inFile.open(this->FileName, ios::in);
@@ -197,7 +192,7 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 	}
 
 	// close everything down
-	stmt->closeResultSet(res);
-	con->terminateStatement(stmt);
+	//stmt->closeResultSet(res);
+	//con->terminateStatement(stmt);
 	return 1;
 }
