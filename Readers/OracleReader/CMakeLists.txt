@@ -11,18 +11,11 @@ ADD_PARAVIEW_PLUGIN(OracleReaderSMPlugin "1.0"
 	
 INCLUDE_DIRECTORIES(../../common)
 
-set(OCCI_INCLUDE_DIR "C:/"
-CACHE PATH "Select the OCCI include directory")
-INCLUDE_DIRECTORIES(${OCCI_INCLUDE_DIR})
+set(ORACLE_INCLUDE_DIR "C:/"
+CACHE PATH "Select the ORACLE include directory")
+INCLUDE_DIRECTORIES(${ORACLE_INCLUDE_DIR})
 
-set(OCCI_LIB_DEBUG "C:/"
-CACHE PATH "Select the OCCI debug lib")
-LINK_DIRECTORIES(${OCCI_LIB_DEBUG})
+set(ORACLE_LIB "C:/"
+CACHE PATH "Select the ORACLE lib")
 
-set(OCCI_LIB_RELEASE "C:/"
-CACHE PATH "Select the OCCI release lib")
-LINK_DIRECTORIES(${OCCI_LIB_RELEASE})
-
-target_link_libraries (OracleReaderSMPlugin ${OCCI_LIB_RELEASE} )	
-
-target_link_libraries (OracleReaderSMPlugin ${OCCI_LIB_DEBUG} )	
+target_link_libraries (OracleReaderSMPlugin ${ORACLE_LIB} )
