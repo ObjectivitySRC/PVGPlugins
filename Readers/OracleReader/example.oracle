@@ -1,6 +1,7 @@
 user=codelco
 pass=codelco
 connection=localhost:1521/xe
+table=TABLE1
 x=IESTE_LOCAL
 y=INORTE_LOCAL
 z=ICOTA_LOCAL

@@ -81,6 +81,7 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 	string db;
 	string username;
 	string password;
+	string tableName;
 	string Px;
 	string Py;
 	string Pz;
@@ -103,6 +104,11 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 	getline(inFile, line);
 	StringUtilities::split(line, lineSplit, "=");
 	db = lineSplit[1];
+
+	// get the table name
+	getline(inFile, line);
+	StringUtilities::split(line, lineSplit, "=");
+	tableName = lineSplit[1];
 
 	// get the x values column name
 	getline(inFile, line);
@@ -136,7 +142,7 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 		vector<double> xValue, yValue, zValue;
 
 		// select all X
-		string sql = "select " + Px + ", " + Py + ", " + Pz + ", " + propName + " from sigg_ly_pdist_collares";
+		string sql = "select " + Px + ", " + Py + ", " + Pz + ", " + propName + " from " + tableName;
 		stmt = con->createStatement(sql);
 		res = stmt->executeQuery();
 		
