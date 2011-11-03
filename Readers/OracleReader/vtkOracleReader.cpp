@@ -131,67 +131,57 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 		// create a default environment
 		env = Environment::createEnvironment(Environment::DEFAULT);
 		// connect to the database and create a connection
-		con = env->createConnection("codelco", "codelco", db);
-		// create a small query
-		string sql = "select * from sigg_ly_pdist_collares";
-		stmt = con->createStatement(sql);
-		if (!stmt)
-		{
-			vtkErrorMacro("Could not SQL statement");
-			return 0;
-		}
-
-		// execute a small query
-		res = stmt->executeQuery();
-
-
-		if (!res)
-		{
-			vtkErrorMacro("Could not execute query");
-			return 0;
-		}
-
-		// get the list of columns
-		MetaData emptab_metaData = con->getMetaData("sigg_ly_pdist_collares", MetaData::PTYPE_TABLE);
-		vector<MetaData> listOfCols = emptab_metaData.getVector(MetaData::ATTR_LIST_COLUMNS);
-		fprintf(log, "%u", listOfCols.size());
-		fclose(log);
-		// assign the proper column indicies
-		int xIndex, yIndex, zIndex, propIndex;
-		for (unsigned i = 0; i < listOfCols.size(); i++)
-		{
-			/*************************************/
-			string columnName = listOfCols.at(i).getString(MetaData::ATTR_NAME);
-			/*************************************/
+		con = env->createConnection(username, password, db);
 		
-			if (columnName==Px)
-			{
-				xIndex = i;
-			}
-			if (columnName==Py)
-			{
-				yIndex = i;
-			}
-			if (columnName==Pz)
-			{
-				zIndex = i;
-			}
-			if (columnName==propName)
-			{
-				propIndex = i;
-			}
-		}
+		vector<double> xValue, yValue, zValue;
+
+		// select all X
+		string sql = "select " + Px + ", " + Py + ", " + Pz + ", " + propName + " from sigg_ly_pdist_collares";
+		stmt = con->createStatement(sql);
+		res = stmt->executeQuery();
+		
+
+		//// get the list of columns
+		//MetaData emptab_metaData = con->getMetaData("sigg_ly_pdist_collares", MetaData::PTYPE_TABLE);
+		//vector<MetaData> listOfCols = emptab_metaData.getVector(MetaData::ATTR_LIST_COLUMNS);
+		//fprintf(log, "%u", listOfCols.size());
+		//fclose(log);
+		//// assign the proper column indicies
+		//int xIndex, yIndex, zIndex, propIndex;
+		//for (unsigned i = 0; i < listOfCols.size(); i++)
+		//{
+		//	/*************************************/
+		//	string columnName = listOfCols.at(i).getString(MetaData::ATTR_NAME);
+		//	/*************************************/
+		//
+		//	if (columnName==Px)
+		//	{
+		//		xIndex = i;
+		//	}
+		//	if (columnName==Py)
+		//	{
+		//		yIndex = i;
+		//	}
+		//	if (columnName==Pz)
+		//	{
+		//		zIndex = i;
+		//	}
+		//	if (columnName==propName)
+		//	{
+		//		propIndex = i;
+		//	}
+		//}
 		vtkPoints* outPoints = vtkPoints::New();
 		vtkCellArray* outVerts = vtkCellArray::New();
 		while(res->next())
 		{
 			double pt[3];
 			// add 1 since they start at 1, not 0
-			pt[0] = res->getDouble(xIndex+1);
-			pt[1] = res->getDouble(yIndex+1);
-			pt[2] = res->getDouble(zIndex+1);
+			pt[0] = res->getDouble(1);
+			pt[1] = res->getDouble(2);
+			pt[2] = res->getDouble(3);
 
-			double propValue = res->getDouble(propIndex+1);
+			double propValue = res->getDouble(4);
 
 			vtkIdType pid = outPoints->InsertNextPoint(pt);
 			outVerts->InsertNextCell(1);
@@ -212,6 +202,10 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 		if (stmt)
 		{
 			con->terminateStatement(stmt);
+		}
+		if (env)
+		{
+			Environment::terminateEnvironment(env);
 		}
 	}
 	catch(oracle::occi::SQLException &e)
