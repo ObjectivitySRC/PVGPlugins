@@ -1,6 +1,6 @@
-user=pryan
-pass=pryan
-connection=Objectivity1-PC:1521/xe
+user=codelco
+pass=codelco
+connection=localhost:1521/xe
 x=IESTE_LOCAL
 y=INORTE_LOCAL
 z=ICOTA_LOCAL

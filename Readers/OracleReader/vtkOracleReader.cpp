@@ -8,7 +8,11 @@
 #include <vtkDoubleArray.h>
 #include <vtkPointData.h>
 
+#include <occi.h>
+#include <oratypes.h>
+#include <stdio.h>
 
+using namespace oracle::occi;
 
 //_________________________________________________________________________
 vtkCxxRevisionMacro(vtkOracleReader, "$Revision: 1.1 $");
@@ -67,52 +71,67 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 		vtkErrorMacro("File Error: cannot open file: "<< this->FileName);
 		return 0;
 	}
+
+
+	Connection	*con;
+	Statement	*stmt;
+	Environment *env;
+	ResultSet	*res;
+
+	string db;
+	string username;
+	string password;
+	string Px;
+	string Py;
+	string Pz;
+	string propName;
+
 	string line;
 	vector<string> lineSplit;
 
 	// username
 	getline(inFile, line);
 	StringUtilities::split(line, lineSplit, "=");
-	this->username = lineSplit[1];
+	username = lineSplit[1];
 
 	// password
 	getline(inFile, line);
 	StringUtilities::split(line, lineSplit, "=");
-	this->password = lineSplit[1];
+	password = lineSplit[1];
 
 	// oracle EZCONNECT string
 	getline(inFile, line);
 	StringUtilities::split(line, lineSplit, "=");
-	this->db = lineSplit[1];
+	db = lineSplit[1];
 
 	// get the x values column name
 	getline(inFile, line);
 	StringUtilities::split(line, lineSplit, "=");
-	this->Px = lineSplit[1];
+	Px = lineSplit[1];
 
 	// get the y values column name
 	getline(inFile, line);
 	StringUtilities::split(line, lineSplit, "=");
-	this->Py = lineSplit[1];
+	Py = lineSplit[1];
 
 	// get the z values column name
 	getline(inFile, line);
 	StringUtilities::split(line, lineSplit, "=");
-	this->Pz = lineSplit[1];
+	Pz = lineSplit[1];
 
 	// get the property name
 	getline(inFile, line);
 	StringUtilities::split(line, lineSplit, "=");
-	this->propName = lineSplit[1];
+	propName = lineSplit[1];
 
 	vtkDoubleArray* propArray = vtkDoubleArray::New();
-	propArray->SetName(this->propName.c_str());
+	propArray->SetName(propName.c_str());
 	try
 	{
 		// create a default environment
 		env = Environment::createEnvironment(Environment::DEFAULT);
 		// connect to the database and create a connection
-		con = env->createConnection(this->username, this->password, this->db);
+		con = env->createConnection("codelco", "codelco", db);
 		// create a small query
 		string sql = "select * from sigg_ly_pdist_collares";
 		stmt = con->createStatement(sql);
@@ -145,19 +164,19 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 			string columnName = listOfCols.at(i).getString(MetaData::ATTR_NAME);
 			/*************************************/
 		
-			if (columnName==this->Px)
+			if (columnName==Px)
 			{
 				xIndex = i;
 			}
-			if (columnName==this->Py)
+			if (columnName==Py)
 			{
 				yIndex = i;
 			}
-			if (columnName==this->Pz)
+			if (columnName==Pz)
 			{
 				zIndex = i;
 			}
-			if (columnName==this->propName)
+			if (columnName==propName)
 			{
 				propIndex = i;
 			}

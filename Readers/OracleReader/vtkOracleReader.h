@@ -1,14 +1,10 @@
 #ifndef _vtkOracleReader_h
 #define _vtkOracleReader_h
 
-#include <occi.h>
-#include <oratypes.h>
-#include <stdio.h>
 
 #include "vtkPolyDataAlgorithm.h"
 
-using namespace std;
-using namespace oracle::occi;
+
 
 class VTK_EXPORT vtkOracleReader : public vtkPolyDataAlgorithm
 {
@@ -37,19 +33,6 @@ protected:
 private:
 
 	const char* FileName; 
-
-	Connection	*con;
-	Statement	*stmt;
-	Environment *env;
-	ResultSet	*res;
-
-	string db;
-	string username;
-	string password;
-	string Px;
-	string Py;
-	string Pz;
-	string propName;
 };
 
 #endif
