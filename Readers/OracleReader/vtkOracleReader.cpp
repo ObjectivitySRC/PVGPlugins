@@ -8,6 +8,8 @@
 #include <vtkDoubleArray.h>
 #include <vtkPointData.h>
 
+
+
 //_________________________________________________________________________
 vtkCxxRevisionMacro(vtkOracleReader, "$Revision: 1.1 $");
 vtkStandardNewMacro(vtkOracleReader);
@@ -36,7 +38,7 @@ void vtkOracleReader::PrintSelf(ostream& os, vtkIndent indent)
 //_________________________________________________________________________
 int vtkOracleReader::CanReadFile( const char* fname )
 {
-	return 1;	
+	return 1;
 }
 
 //_________________________________________________________________________
@@ -52,6 +54,8 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 							   vtkInformationVector** inputVector,
 							   vtkInformationVector* outputVector)
 {
+	FILE *log;
+	log = fopen("C:/oracle_log.txt", "w");
 	vtkInformation *outInfo = outputVector->GetInformationObject(0);
 	vtkPolyData *output = vtkPolyData::SafeDownCast(outInfo->Get(vtkDataObject::DATA_OBJECT()));
 
@@ -63,7 +67,6 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 		vtkErrorMacro("File Error: cannot open file: "<< this->FileName);
 		return 0;
 	}
-
 	string line;
 	vector<string> lineSplit;
 
@@ -102,18 +105,14 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 	StringUtilities::split(line, lineSplit, "=");
 	this->propName = lineSplit[1];
 
-	inFile.close();
-
 	vtkDoubleArray* propArray = vtkDoubleArray::New();
 	propArray->SetName(this->propName.c_str());
-	
 	try
 	{
 		// create a default environment
 		env = Environment::createEnvironment(Environment::DEFAULT);
 		// connect to the database and create a connection
 		con = env->createConnection(this->username, this->password, this->db);
-
 		// create a small query
 		string sql = "select * from sigg_ly_pdist_collares";
 		stmt = con->createStatement(sql);
@@ -125,6 +124,8 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 
 		// execute a small query
 		res = stmt->executeQuery();
+
+
 		if (!res)
 		{
 			vtkErrorMacro("Could not execute query");
@@ -132,19 +133,18 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 		}
 
 		// get the list of columns
-		// res->getColumnListMetaData() crashes
-		// so this is currently the only known way
 		MetaData emptab_metaData = con->getMetaData("sigg_ly_pdist_collares", MetaData::PTYPE_TABLE);
-		vector<MetaData> meta;
-		vector<MetaData>listOfCols;
-		listOfCols=emptab_metaData.getVector(MetaData::ATTR_LIST_COLUMNS);
-
+		vector<MetaData> listOfCols = emptab_metaData.getVector(MetaData::ATTR_LIST_COLUMNS);
+		fprintf(log, "%u", listOfCols.size());
+		fclose(log);
 		// assign the proper column indicies
 		int xIndex, yIndex, zIndex, propIndex;
 		for (unsigned i = 0; i < listOfCols.size(); i++)
 		{
-			MetaData column = listOfCols[i];
-			string columnName = column.getString(MetaData::ATTR_NAME);
+			/*************************************/
+			string columnName = listOfCols.at(i).getString(MetaData::ATTR_NAME);
+			/*************************************/
+		
 			if (columnName==this->Px)
 			{
 				xIndex = i;
@@ -162,7 +162,6 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 				propIndex = i;
 			}
 		}
-
 		vtkPoints* outPoints = vtkPoints::New();
 		vtkCellArray* outVerts = vtkCellArray::New();
 		while(res->next())
@@ -185,14 +184,21 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 		output->SetPoints(outPoints);
 		output->SetVerts(outVerts);
 		output->GetPointData()->AddArray(propArray);
+
+		// close everything down
+		if (res)
+		{
+			stmt->closeResultSet(res);
+		}
+		if (stmt)
+		{
+			con->terminateStatement(stmt);
+		}
 	}
 	catch(oracle::occi::SQLException &e)
 	{
          vtkErrorMacro(""<<e.what());
 	}
-
-	// close everything down
-	//stmt->closeResultSet(res);
-	//con->terminateStatement(stmt);
+	
 	return 1;
 }

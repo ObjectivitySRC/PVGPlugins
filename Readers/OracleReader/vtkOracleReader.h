@@ -3,6 +3,7 @@
 
 #include <occi.h>
 #include <oratypes.h>
+#include <stdio.h>
 
 #include "vtkPolyDataAlgorithm.h"
 
