@@ -10,7 +10,7 @@
         <FileListDomain name="files"/>
       </StringVectorProperty>
 
-      <StringVectorProperty
+      <!--StringVectorProperty
         name="Headers"
         command="GetHeaders"
         information_only="1">
@@ -51,7 +51,7 @@
          number_of_elements_per_command="3"
          element_types="2 2 0"
          immediate_update="1">
-      </StringVectorProperty>	  
+      </StringVectorProperty-->	  
   
     </SourceProxy>
   </ProxyGroup>

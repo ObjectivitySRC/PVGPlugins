@@ -37,7 +37,6 @@ FLAC3DReader
 GocadReader
 GXFReader
 Map3dBlockReader
-#ODBCReader
 PointSetReader
 SGeMSReader
 ShapeFileReader
@@ -90,7 +89,6 @@ GocadReader/vtkGocadVoxet.cxx
 GocadReader/vtkGocadSGrid.cxx
 GXFReader/vtkGXFReader.cxx
 Map3dBlockReader/vtkMap3dBlockReader.cxx
-#ODBCReader/vtkODBCReader.cpp
 PointSetReader/vtkPointSetReader.cpp
 SGeMSReader/vtkSGeMSReader.cxx
 SGeMSReader/vtkSGeMSCgridReader.cxx
@@ -155,7 +153,6 @@ DrillHoleReader/pqDrillHoleReader.cxx
 FLAC3DReader/pqFLAC3DReader.cpp
 3DECReader/pq3DECReader.cpp
 GocadReader/pqGocadReader.cxx
-#ODBCReader/pqODBCReader.cpp
 PointSetReader/pqPointSetReader.cxx
 SOTResult/pqSOTResult.cxx
 LineNetworkReader/pqLineNetworkReader.cxx
@@ -168,7 +165,6 @@ DrillHoleReader/pqDrillHoleReader.h
 FLAC3DReader/pqFLAC3DReader.h
 3DECReader/pq3DECReader.h
 GocadReader/pqGocadReader.h
-#ODBCReader/pqODBCReader.h
 PointSetReader/pqPointSetReader.h
 SOTResult/pqSOTResult.h
 LineNetworkReader/pqLineNetworkReader.h
@@ -212,9 +208,7 @@ ADD_PARAVIEW_OBJECT_PANEL(IFACES6 IFACE_SRCS6 CLASS_NAME pqGocadReader
 
 ADD_PARAVIEW_OBJECT_PANEL(IFACES7 IFACE_SRCS7 CLASS_NAME pqLineNetworkReader
                          XML_NAME LineNetworkReader XML_GROUP sources)		
-
-#ADD_PARAVIEW_OBJECT_PANEL(IFACES8 IFACE_SRCS8 CLASS_NAME pqODBCReader
-#                         XML_NAME ODBCReader XML_GROUP sources)		
+		
 
 ADD_PARAVIEW_OBJECT_PANEL(IFACES9 IFACE_SRCS9 CLASS_NAME pqFLAC3DReader
                          XML_NAME FLAC3DReader XML_GROUP sources)				
@@ -273,8 +267,8 @@ ADD_PARAVIEW_PLUGIN(PVGReadersCPlugin "1.0"
 	
 ##############################################################
 # Oracle Reader
-OPTION(OracleReader_Build "Build Oracle Reader Plugin" OFF)
-IF (OracleReader_Build)
+OPTION(PVG_BUILD_ORACLE "Build Oracle Reader Plugin" OFF)
+IF (PVG_BUILD_ORACLE)
 	#set(ORACLE_LIB "C:/"
 	#CACHE PATH "Select the ORACLE lib")
 	#target_link_libraries (PVGReadersSMPlugin ${ORACLE_LIB} )	
@@ -286,8 +280,18 @@ IF (OracleReader_Build)
 	#INCLUDE_DIRECTORIES(OracleReader)
 	ADD_SUBDIRECTORY(OracleReader)
 	
-ENDIF (OracleReader_Build)
+ENDIF (PVG_BUILD_ORACLE)
 ##############################################################	
+
+##############################################################
+# ODBC Reader
+OPTION(PVG_BUILD_ODBC "Build ODBC Reader Plugin" OFF)
+IF (PVG_BUILD_ODBC)
+	ADD_SUBDIRECTORY(ODBCReader)
+ENDIF (PVG_BUILD_ODBC)
+##############################################################	
+
+
 
 #CPACK CODE TO BUNDLE THE DLLS CORRECTLY
 INSTALL(TARGETS PVGReadersSMPlugin PVGReadersGUIPlugin PVGReadersCPlugin

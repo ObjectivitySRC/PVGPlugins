@@ -31,23 +31,23 @@ public:
 
 	vtkSetStringMacro(FileName);  
 
-	vtkSetStringMacro(Headers);
-	vtkGetStringMacro(Headers);
+	//vtkSetStringMacro(Headers);
+	//vtkGetStringMacro(Headers);
 
-	vtkSetStringMacro(ActiveTable);
-	vtkGetStringMacro(ActiveTable);
+	//vtkSetStringMacro(ActiveTable);
+	//vtkGetStringMacro(ActiveTable);
 
-	vtkSetStringMacro(ActiveTableType);
-	vtkGetStringMacro(ActiveTableType);
+	//vtkSetStringMacro(ActiveTableType);
+	//vtkGetStringMacro(ActiveTableType);
 
-	vtkSetStringMacro(Px);
-	vtkGetStringMacro(Px);
+	//vtkSetStringMacro(Px);
+	//vtkGetStringMacro(Px);
 
-	vtkSetStringMacro(Py);
-	vtkGetStringMacro(Py);
+	//vtkSetStringMacro(Py);
+	//vtkGetStringMacro(Py);
 
-	vtkSetStringMacro(Pz);
-	vtkGetStringMacro(Pz);
+	//vtkSetStringMacro(Pz);
+	//vtkGetStringMacro(Pz);
 
 	int CanReadFile( const char* fname );
 
