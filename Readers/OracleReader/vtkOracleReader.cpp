@@ -144,7 +144,7 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 	string sql = "select " + Px + ", " + Py + ", " + Pz + ", " + propName + " from " + tableName;
 	if (!OCI_ExecuteStmt(stmt, sql.c_str()))
 	{
-		vtkErrorMacro("Could not execute SQL statement");
+		vtkErrorMacro("Could not execute SQL statement: " << sql);
 		return EXIT_FAILURE;
 	}
 	
