@@ -8,11 +8,10 @@
 #include <vtkDoubleArray.h>
 #include <vtkPointData.h>
 
-#include <occi.h>
-#include <oratypes.h>
+#include "ocilib.h"
 #include <stdio.h>
 
-using namespace oracle::occi;
+using namespace std;
 
 //_________________________________________________________________________
 vtkCxxRevisionMacro(vtkOracleReader, "$Revision: 1.1 $");
@@ -73,14 +72,13 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 	}
 
 
-	Connection	*con;
-	Statement	*stmt;
-	Environment *env;
-	ResultSet	*res;
+	OCI_Connection* con;
+	OCI_Statement* stmt;
+	OCI_Resultset* res;
 
 	string db;
-	string username;
-	string password;
+	string user;
+	string passwd;
 	string tableName;
 	string Px;
 	string Py;
@@ -93,12 +91,12 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 	// username
 	getline(inFile, line);
 	StringUtilities::split(line, lineSplit, "=");
-	username = lineSplit[1];
+	user = lineSplit[1];
 
 	// password
 	getline(inFile, line);
 	StringUtilities::split(line, lineSplit, "=");
-	password = lineSplit[1];
+	passwd = lineSplit[1];
 
 	// oracle EZCONNECT string
 	getline(inFile, line);
@@ -132,92 +130,50 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 
 	vtkDoubleArray* propArray = vtkDoubleArray::New();
 	propArray->SetName(propName.c_str());
-	try
+	if (!OCI_Initialize(NULL, NULL, OCI_ENV_DEFAULT))
 	{
-		// create a default environment
-		env = Environment::createEnvironment(Environment::DEFAULT);
-		// connect to the database and create a connection
-		con = env->createConnection(username, password, db);
-		
-		vector<double> xValue, yValue, zValue;
-
-		// select all X
-		string sql = "select " + Px + ", " + Py + ", " + Pz + ", " + propName + " from " + tableName;
-		stmt = con->createStatement(sql);
-		res = stmt->executeQuery();
-		
-
-		//// get the list of columns
-		//MetaData emptab_metaData = con->getMetaData("sigg_ly_pdist_collares", MetaData::PTYPE_TABLE);
-		//vector<MetaData> listOfCols = emptab_metaData.getVector(MetaData::ATTR_LIST_COLUMNS);
-		//fprintf(log, "%u", listOfCols.size());
-		//fclose(log);
-		//// assign the proper column indicies
-		//int xIndex, yIndex, zIndex, propIndex;
-		//for (unsigned i = 0; i < listOfCols.size(); i++)
-		//{
-		//	/*************************************/
-		//	string columnName = listOfCols.at(i).getString(MetaData::ATTR_NAME);
-		//	/*************************************/
-		//
-		//	if (columnName==Px)
-		//	{
-		//		xIndex = i;
-		//	}
-		//	if (columnName==Py)
-		//	{
-		//		yIndex = i;
-		//	}
-		//	if (columnName==Pz)
-		//	{
-		//		zIndex = i;
-		//	}
-		//	if (columnName==propName)
-		//	{
-		//		propIndex = i;
-		//	}
-		//}
-		vtkPoints* outPoints = vtkPoints::New();
-		vtkCellArray* outVerts = vtkCellArray::New();
-		while(res->next())
-		{
-			double pt[3];
-			// add 1 since they start at 1, not 0
-			pt[0] = res->getDouble(1);
-			pt[1] = res->getDouble(2);
-			pt[2] = res->getDouble(3);
-
-			double propValue = res->getDouble(4);
-
-			vtkIdType pid = outPoints->InsertNextPoint(pt);
-			outVerts->InsertNextCell(1);
-			outVerts->InsertCellPoint(pid);
-
-			propArray->InsertNextValue(propValue);
-		}
-
-		output->SetPoints(outPoints);
-		output->SetVerts(outVerts);
-		output->GetPointData()->AddArray(propArray);
-
-		// close everything down
-		if (res)
-		{
-			stmt->closeResultSet(res);
-		}
-		if (stmt)
-		{
-			con->terminateStatement(stmt);
-		}
-		if (env)
-		{
-			Environment::terminateEnvironment(env);
-		}
+		vtkErrorMacro("Could not initialize environment");
+		return EXIT_FAILURE;
 	}
-	catch(oracle::occi::SQLException &e)
+	con = OCI_ConnectionCreate(db.c_str(), user.c_str(), passwd.c_str(), OCI_SESSION_DEFAULT);
+	stmt = OCI_StatementCreate(con);
+	
+	vector<double> xValue, yValue, zValue;
+
+	// select desired values
+	string sql = "select " + Px + ", " + Py + ", " + Pz + ", " + propName + " from " + tableName;
+	if (!OCI_ExecuteStmt(stmt, sql.c_str()))
 	{
-         vtkErrorMacro(""<<e.what());
+		vtkErrorMacro("Could not execute SQL statement");
+		return EXIT_FAILURE;
 	}
+	
+	// Get the result set and get the desired data
+	vtkPoints* outPoints = vtkPoints::New();
+	vtkCellArray* outVerts = vtkCellArray::New();
+	res = OCI_GetResultset(stmt);
+	while(OCI_FetchNext(res))
+	{
+		double pt[3];
+		// add 1 since they start at 1, not 0
+		pt[0] = OCI_GetDouble(res, 1);
+		pt[1] = OCI_GetDouble(res, 2);
+		pt[2] = OCI_GetDouble(res, 3);
+
+		double propValue = OCI_GetDouble(res, 4);
+
+		vtkIdType pid = outPoints->InsertNextPoint(pt);
+		outVerts->InsertNextCell(1);
+		outVerts->InsertCellPoint(pid);
+
+		propArray->InsertNextValue(propValue);
+	}
+
+	output->SetPoints(outPoints);
+	output->SetVerts(outVerts);
+	output->GetPointData()->AddArray(propArray);
+
+	OCI_Cleanup();
 	
 	return 1;
 }

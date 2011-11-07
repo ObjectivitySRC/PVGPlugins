@@ -396,7 +396,7 @@ void pqSOTResult::setup3DWidgetsIfNeeded()
   pqProxy* pqproxy = this->referenceProxy();
   double Bounds[6];
   qobject_cast<pqPipelineSource*>(pqproxy)
-    ->getOutputPort(0)->getDataInformation()->GetBounds(Bounds);
+    ->getOutputPort(0)->getDataInformation(0)->GetBounds(Bounds);
   if (Bounds[1] >= Bounds[0] && Bounds[3] >= Bounds[2] &&
     Bounds[5] >= Bounds[4])
     {
