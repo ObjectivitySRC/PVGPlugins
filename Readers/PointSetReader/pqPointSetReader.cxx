@@ -195,7 +195,7 @@ void pqPointSetReader::readPropertiesFromFile()
 
 	bool loadStv = true;
 	if(this->stv->GetNumberOfElements())
-	{http://linux.about.com/library/cmd/blcmdln_foreach.htm
+	{
 		loadStv = false;
 	}
 
@@ -352,6 +352,8 @@ void pqPointSetReader::readPreviewData()
 		}
 		line = t.readLine();
 		lineSplit2 = line.split(this->separator->text());
+		++row;
+		col = 0;
 	}
 
 	file.close();
