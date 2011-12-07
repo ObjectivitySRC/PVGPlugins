@@ -7,6 +7,8 @@
 #include <vtkCellArray.h>
 #include <vtkDoubleArray.h>
 #include <vtkPointData.h>
+#include <iostream>
+#include <fstream>
 
 #include "ocilib.h"
 #include <stdio.h>
@@ -57,8 +59,9 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 							   vtkInformationVector** inputVector,
 							   vtkInformationVector* outputVector)
 {
-	FILE *log;
-	log = fopen("C:/oracle_log.txt", "w");
+	ofstream logFile;
+	logFile.open("OracleReader.log", 'w');
+
 	vtkInformation *outInfo = outputVector->GetInformationObject(0);
 	vtkPolyData *output = vtkPolyData::SafeDownCast(outInfo->Get(vtkDataObject::DATA_OBJECT()));
 
@@ -130,24 +133,74 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 
 	vtkDoubleArray* propArray = vtkDoubleArray::New();
 	propArray->SetName(propName.c_str());
-	if (!OCI_Initialize(NULL, NULL, OCI_ENV_DEFAULT))
+	if (!OCI_Initialize(NULL, NULL, OCI_ENV_DEFAULT | OCI_ENV_CONTEXT))
 	{
+		logFile << "Could not initialize environment" << endl;
 		vtkErrorMacro("Could not initialize environment");
 		return EXIT_FAILURE;
 	}
 	con = OCI_ConnectionCreate(db.c_str(), user.c_str(), passwd.c_str(), OCI_SESSION_DEFAULT);
+	if (con == NULL)
+	{
+		logFile << "connection failed: connection string " << db << " is not working" << endl;
+		vtkErrorMacro("connection failed: connection string " << db << " is not working");
+		OCI_Error *err = OCI_GetLastError();
+		if(err != NULL)
+		{
+			logFile << "errcode " << OCI_ErrorGetOCICode(err) << "  errmsg " << OCI_ErrorGetString(err) << endl;
+			vtkErrorMacro("errcode " << OCI_ErrorGetOCICode(err) << "  errmsg " << OCI_ErrorGetString(err));
+		}
+		return 0;
+	}
+	else
+	{
+		logFile << "connection succeded" << endl;
+		logFile << "Server version: major.minor.revision.connection = " << OCI_GetServerMajorVersion(con)
+			 << "." << OCI_GetServerMinorVersion(con) << "." << OCI_GetServerRevisionVersion(con)
+			 << "." << OCI_GetVersionConnection(con) << endl;
+
+		vtkWarningMacro("Server version: major.minor.revision.connection = " << OCI_GetServerMajorVersion(con)
+			 << "." << OCI_GetServerMinorVersion(con) << "." << OCI_GetServerRevisionVersion(con)
+			 << "." << OCI_GetVersionConnection(con));
+	}
+
 	stmt = OCI_StatementCreate(con);
 	
-	vector<double> xValue, yValue, zValue;
 
 	// select desired values
 	string sql = "select " + Px + ", " + Py + ", " + Pz + ", " + propName + " from " + tableName;
 	if (!OCI_ExecuteStmt(stmt, sql.c_str()))
 	{
+		logFile << "Could not execute SQL statement: " << sql << endl;
 		vtkErrorMacro("Could not execute SQL statement: " << sql);
-		return EXIT_FAILURE;
+		return 0;
 	}
 	
+    OCI_Statement *st;
+    OCI_Resultset *rs;
+	st = OCI_StatementCreate(con);
+
+	string statement = "select * from " + tableName;
+	OCI_ExecuteStmt(st, statement.c_str());
+
+    rs = OCI_GetResultset(st);
+    int nb = OCI_GetColumnCount(rs);
+    
+	logFile << endl << "column: name, type, size, precision, scale" << endl;
+	vtkWarningMacro("column: name, type, size, precision, scale");
+    for(int i = 1; i <= nb; i++)
+    {
+		OCI_Column* col = OCI_GetColumn(rs, i);
+     
+		vtkWarningMacro("" << OCI_GetColumnName(col) << ", " << OCI_GetColumnSQLType(col)
+			<< ", " << OCI_GetColumnSize(col) << ", " << OCI_GetColumnSize(col) 
+			<< ", " << OCI_GetColumnPrecision(col) << ", " << OCI_GetColumnScale(col));
+		
+		logFile << OCI_GetColumnName(col) << ", " << OCI_GetColumnSQLType(col)
+			<< ", " << OCI_GetColumnSize(col) << ", " << OCI_GetColumnSize(col) 
+			<< ", " << OCI_GetColumnPrecision(col) << ", " << OCI_GetColumnScale(col) << endl;
+    }
+
 	// Get the result set and get the desired data
 	vtkPoints* outPoints = vtkPoints::New();
 	vtkCellArray* outVerts = vtkCellArray::New();
@@ -175,5 +228,6 @@ int vtkOracleReader::RequestData(vtkInformation* request,
 
 	OCI_Cleanup();
 	
+	logFile.close();
 	return 1;
 }
