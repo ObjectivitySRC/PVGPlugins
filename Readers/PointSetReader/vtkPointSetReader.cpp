@@ -86,7 +86,7 @@ struct LNR_Internals
 		{
 				// Found a token, add it to the vector.
 				temp_str= str.substr(lastPos, pos - lastPos);
-				tokens.push_back( trim (temp_str) );
+				tokens.push_back( (temp_str) );
 				// Skip delimiters.  Note the "not_of"
 				lastPos = pos+1;
 				// Find next "non-delimiter"
@@ -100,7 +100,7 @@ struct LNR_Internals
 		else
 		{					
 			temp_str= str.substr(lastPos, str.length()-lastPos);
-			tokens.push_back( trim(temp_str) );
+			tokens.push_back( (temp_str) );
 		}
 }
 
