@@ -1,49 +1,6 @@
 <ServerManagerConfiguration>
   <ProxyGroup name="sources">
-    <SourceProxy name="VulcanTriReader"
-                 class="vtkVulcanTriReader">
-      <StringVectorProperty
-        name="FileName"
-        command="SetFileName"
-        number_of_elements="1">
-        <FileListDomain name="files"/>
-      </StringVectorProperty>
-    </SourceProxy>
-    <!-- End of VulcanTriReader -->
-
-    <SourceProxy name="VulcanGridReader"
-            class="vtkVulcanGridReader">
-      <StringVectorProperty
-        name="FileName"
-        command="SetFileName"
-        number_of_elements="1">
-        <FileListDomain name="files"/>
-      </StringVectorProperty>
-    </SourceProxy>
-    <!-- End of VulcanGridReader -->
-
-    <SourceProxy name="VulcanBlockModelReader"
-        class="vtkVulcanBlockModelReader">
-      <StringVectorProperty
-        name="FileName"
-        command="SetFileName"
-        number_of_elements="1">
-        <FileListDomain name="files"/>
-      </StringVectorProperty>
-    </SourceProxy>
-    <!-- End of VulcanGridReader -->
-    
-    <SourceProxy name="MineSightReader"
-                class="vtkMineSightReader">
-      <StringVectorProperty
-        name="FileName"
-        command="SetFileName"
-        number_of_elements="1">
-        <FileListDomain name="files"/>
-      </StringVectorProperty>
-    </SourceProxy>
-    <!-- End of MineSight Reader -->
-
+  
   <!-- Start GeoReferencedImage -->
     <SourceProxy name="GeoReferencedImageReader" class="vtkGeoReferencedImageReader">	
       <StringVectorProperty
