@@ -569,7 +569,7 @@
           <Group name="filters"/>
         </ProxyGroupDomain>
         <DataTypeDomain name="input_type">
-          <DataType value="vtkPolySet"/>
+          <DataType value="vtkPolyData"/>
         </DataTypeDomain>
       </InputProperty>
       <InputProperty name="Input"

@@ -43,8 +43,7 @@ vtkStandardNewMacro ( vtkInsideClosedSurface );
 //----------------------------------------------------------------------------
 vtkInsideClosedSurface::vtkInsideClosedSurface()
 {
-   const int ports = 2;
-   this->SetNumberOfInputPorts ( ports );
+   this->SetNumberOfInputPorts ( 2 );
    pointSet = VERTEX;
 	 this->source = 0;
 
@@ -90,7 +89,7 @@ int vtkInsideClosedSurface::RequestData( vtkInformation *vtkNotUsed ( request ),
    vtkDataSet *input = vtkDataSet::SafeDownCast (
                        inInfo->Get ( vtkDataObject::DATA_OBJECT() ) );
    // multi group source input
-   vtkPolyData *source = vtkPolyData::SafeDownCast (
+   source = vtkPolyData::SafeDownCast (
                          sourceInfo->Get ( vtkPolyData::DATA_OBJECT() ) );
 
 	 //this->source = vtkPolyData::SafeDownCast (
@@ -111,7 +110,6 @@ int vtkInsideClosedSurface::RequestData( vtkInformation *vtkNotUsed ( request ),
    startTime = time ( NULL );
 #endif
 
-	 this->source = this->GetSource();
 
    // First step is only checking. Useless for the second step
 	 vtkPolyData* edges = vtkPolyData::New();
