@@ -30,7 +30,7 @@ protected:
 
 public:
 
-	void setFacesTriangles(map<int,list<int*>> &segments, map<int,pair<double,int>> &zSegments, 
+	void setFacesTriangles(map< int,list<int*> > &segments, map< int,pair<double,int> > &zSegments, 
 		vtkPoints *inPoints);
 	void setFacesVertices(vtkPoints *inPoints, int i);
 	void setFacesVertices2(vtkPoints *inPoints, map<int,Face> &Faces);
