@@ -267,8 +267,8 @@ ADD_PARAVIEW_PLUGIN(PVGReadersCPlugin "1.0"
 	
 ##############################################################
 # Oracle Reader
-OPTION(PVG_BUILD_ORACLE "Build Oracle Reader Plugin" OFF)
-IF (PVG_BUILD_ORACLE)
+#OPTION(PVG_BUILD_ORACLE "Build Oracle Reader Plugin" OFF)
+#IF (PVG_BUILD_ORACLE)
 	#set(ORACLE_LIB "C:/"
 	#CACHE PATH "Select the ORACLE lib")
 	#target_link_libraries (PVGReadersSMPlugin ${ORACLE_LIB} )	
@@ -278,17 +278,17 @@ IF (PVG_BUILD_ORACLE)
 	#INCLUDE_DIRECTORIES(${ORACLE_INCLUDE_DIR})
 	
 	#INCLUDE_DIRECTORIES(OracleReader)
-	ADD_SUBDIRECTORY(OracleReader)
+	#ADD_SUBDIRECTORY(OracleReader)
 	
-ENDIF (PVG_BUILD_ORACLE)
+#ENDIF (PVG_BUILD_ORACLE)
 ##############################################################	
 
 ##############################################################
 # ODBC Reader
-OPTION(PVG_BUILD_ODBC "Build ODBC Reader Plugin" OFF)
-IF (PVG_BUILD_ODBC)
-	ADD_SUBDIRECTORY(ODBCReader)
-ENDIF (PVG_BUILD_ODBC)
+#OPTION(PVG_BUILD_ODBC "Build ODBC Reader Plugin" OFF)
+#IF (PVG_BUILD_ODBC)
+	#ADD_SUBDIRECTORY(ODBCReader)
+#ENDIF (PVG_BUILD_ODBC)
 ##############################################################	
 
 
