@@ -8,7 +8,7 @@ using namespace std;
 //--------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------
-void Segments::setFacesTriangles(map<int,list<int*>> &segments, map<int,pair<double,int>> &zSegments,
+void Segments::setFacesTriangles(map< int,list<int*> > &segments, map< int,pair<double,int> > &zSegments,
 																 vtkPoints *inPoints)
 {
 	double *currentTuple;
@@ -18,7 +18,7 @@ void Segments::setFacesTriangles(map<int,list<int*>> &segments, map<int,pair<dou
 	int numberOfBottomTriangles;
 	double zmed;
 
-	for(map<int,list<int*>>::iterator stope=segments.begin(); stope!=segments.end(); stope++)
+	for(map< int,list<int*> >::iterator stope=segments.begin(); stope!=segments.end(); stope++)
 	{
 		numberOfTopTriangles = 0;
 		numberOfBottomTriangles = 0;
@@ -107,7 +107,7 @@ void Segments::setFacesVertices2(vtkPoints *inPoints, map<int,Face> &Faces )
 	double angle3;
 	list<int*> Triangles;
 
-	vector<pair<int,double*>> facePoints(4);
+	vector< pair<int,double*> > facePoints(4);
 	facePoints[0].second = new double[3];
 	facePoints[1].second = new double[3];
 	facePoints[2].second = new double[3];

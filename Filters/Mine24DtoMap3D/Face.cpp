@@ -1,6 +1,4 @@
 #include <fstream>
-#include <windows.h>
-#include <conio.h>
 #include <math.h>
 
 #include "Face.h"

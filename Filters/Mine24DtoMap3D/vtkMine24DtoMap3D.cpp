@@ -39,8 +39,8 @@ struct triplet	// this triplet is used for x,y and z coordinates of a point
 
 void split(const string& str,vector<string>& tokens,const string& delimiters);
 double roundZ(double Z);
-void bestBoundingBox(deque<pair<double,double>> inPoints,   
-			deque<pair<double,double>> &outPoints, double z, double stepAngle);
+void bestBoundingBox(deque<pair< double,double> > inPoints,   
+			deque< pair<double,double> > &outPoints, double z, double stepAngle);
 bool generateActivities(map<string,int> &activityNumbers, char* file, 
 												int ActivityStep, int dateFormat);
 
@@ -50,8 +50,8 @@ bool generateActivities(map<string,int> &activityNumbers, char* file,
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-void build_hull(deque<pair<double,double>> raw_points, 
-								deque<pair<double,double>> &output);
+void build_hull(deque< pair<double,double> > raw_points, 
+								deque< pair<double,double> > &output);
 void build_half_hull(std::deque< std::pair<double,double> > input,
                       std::deque< std::pair<double,double> > &output,
 											std::pair<double,double> left, std::pair<double,double> right,
@@ -617,7 +617,7 @@ void vtkMine24DtoMap3D::simplifyMesh()
 //-----------------------------------------------------------------------------------------------------------
 void vtkMine24DtoMap3D::approximateStopes()
 {
-	map<pair<double,int>,deque<pair<double,double>>> segments;
+	map< pair<double,int>,deque< pair<double,double> > > segments;
 	//segments<pair<z,segmentID>,deque<pair<x,y>>>: each element of this map
 	// will contain all the points having the same elevation z and the same segment id.
 	// that's mean each element of segments, contain all points of a single stope face or subface.
@@ -638,7 +638,7 @@ void vtkMine24DtoMap3D::approximateStopes()
 	// because segments is a map, it will be automaticly sorted from lower to higher value of z
 
 
-	map<int, deque<deque<triplet>>> SegmentsFaces;
+	map< int, deque< deque<triplet> > > SegmentsFaces;
 	// map< segID, deque<deque<triplet(x,y,z)>> 
 	//
 	//	================================================================
@@ -723,8 +723,8 @@ void vtkMine24DtoMap3D::approximateStopes()
 	}
 	
 	deque<triplet> outBounds(4);		// 4 boundary points of a face
-	deque<pair<double,double>> outB(4);
-	deque<pair<double,double>> outHull(4);
+	deque< pair<double,double> > outB(4);
+	deque< pair<double,double> > outHull(4);
 	int vertsCounter=0;
 	triplet pTemp;
 	double zN = 0;
@@ -757,7 +757,7 @@ void vtkMine24DtoMap3D::approximateStopes()
 	}
 */
 
-	for(map<pair<double,int>,deque<pair<double,double>>>::iterator 
+	for(map< pair<double,int>,deque< pair<double,double> > >::iterator 
 		it = segments.begin(); 
 		it!= segments.end(); it++)
 	{
@@ -827,13 +827,13 @@ void vtkMine24DtoMap3D::approximateStopes()
 
 
 	int pid = 0;
-	for(map<int, deque<deque<triplet>>>::iterator it = SegmentsFaces.begin();
+	for(map< int, deque< deque<triplet> > >::iterator it = SegmentsFaces.begin();
 		it!= SegmentsFaces.end(); it++)
 	{
 		if(it->second.size()<2)
 			continue;
 
-		deque<deque<triplet>>::iterator iter = (it->second).begin();
+		deque< deque<triplet> >::iterator iter = (it->second).begin();
 		outPoints->InsertNextPoint((*iter)[0].first,(*iter)[0].second,(*iter)[0].third);
 		outPoints->InsertNextPoint((*iter)[1].first,(*iter)[1].second,(*iter)[1].third);
 		outPoints->InsertNextPoint((*iter)[2].first,(*iter)[2].second,(*iter)[2].third);
@@ -991,7 +991,7 @@ void vtkMine24DtoMap3D::approximateStopes()
 //----------------------------------------------------------------------------
 void vtkMine24DtoMap3D::simplifyStopes()
 {
-	map<int,list<int*>> segments;	// map<segment id, list<triangle<p1,p2,p3>>
+	map< int,list<int*> > segments;	// map<segment id, list<triangle<p1,p2,p3>>
 	//	================================================================
 	//							 |================================================
 	//							 | (triangle)1: id(point1),id(point2),id(point3) 
@@ -1024,7 +1024,7 @@ void vtkMine24DtoMap3D::simplifyStopes()
 
 
 
-	map<int,pair<double,int>> zSegments;
+	map< int,pair<double,int> > zSegments;
 	//map<segment id, pair<z(triangle),number of triangle perpendicular to z>
 	// this map will contain only the triangles perpendicular to Z axis
 	// the number of triangle pependicular to z will be used to find the 
@@ -1315,7 +1315,7 @@ void vtkMine24DtoMap3D::simplifyStopes()
 void vtkMine24DtoMap3D::convertStopes()
 {
 
-	map<int,list<pair<vtkIdType,vtkIdType*>>> segments;
+	map< int,list< pair<vtkIdType,vtkIdType*> > > segments;
 	int num;
 	map<int,int> color;
 	int colour;
@@ -1345,12 +1345,12 @@ void vtkMine24DtoMap3D::convertStopes()
 
 	outPoints->ShallowCopy(inPoints);
 
-	for(map<int,list<pair<vtkIdType,vtkIdType*>>>::iterator cells = segments.begin(); cells != segments.end(); cells++)
+	for(map< int,list< pair<vtkIdType,vtkIdType*> > >::iterator cells = segments.begin(); cells != segments.end(); cells++)
 	{
 		colour = color[cells->first];
 		colour = this->getColor(colour);
 
-		for(list<pair<vtkIdType,vtkIdType*>>::iterator cell = cells->second.begin(); cell != cells->second.end(); cell++)
+		for(list< pair<vtkIdType,vtkIdType*> >::iterator cell = cells->second.begin(); cell != cells->second.end(); cell++)
 		{
 			outCells->InsertNextCell(cell->first);
 			BlkNum->InsertValue(countCells,colour);
@@ -1561,7 +1561,7 @@ double roundZ(double Z)
 	else
 		f=1;
 
-	int z = abs(floor(Z + 0.5));
+	int z = abs((int)floor(Z + 0.5));
 	int a = z%10;
 
 	if(a<=1)
@@ -1585,14 +1585,14 @@ double roundZ(double Z)
 
 
 //-----------------------------------------------------------------------------------------------------------
-void bestBoundingBox(deque<pair<double,double>> inPoints, deque<pair<double,double>> &outPoints,
+void bestBoundingBox(deque< pair<double,double> > inPoints, deque< pair<double,double> > &outPoints,
 										 double z, double stepAngle)
 {
 	deque<double> v(4);
 	double angle;
 	double x,y;
 	double xmin, xmax, ymin, ymax;
-	map<pair<int,double>,deque<double>> bound;
+	map< pair<int,double>,deque<double> > bound;
 
 	xmin = inPoints[0].first;
 	xmax = xmin;
@@ -1601,7 +1601,7 @@ void bestBoundingBox(deque<pair<double,double>> inPoints, deque<pair<double,doub
 
 
 	//search for xmin.xmax,ymin,ymax
-	for(deque<pair<double,double>>::iterator it = inPoints.begin()+1; it!= inPoints.end(); it++)
+	for(deque< pair<double,double> >::iterator it = inPoints.begin()+1; it!= inPoints.end(); it++)
 	{
 		if(it->first < xmin)
 			xmin = it->first;
@@ -1629,7 +1629,7 @@ void bestBoundingBox(deque<pair<double,double>> inPoints, deque<pair<double,doub
 		ymin = ( (inPoints[0].first)*sin(angle) ) + ( (inPoints[0].second)*cos(angle) );
 		xmax = xmin;
 		ymax = ymin;
-		for(deque<pair<double,double>>::iterator it = inPoints.begin()+1 ; it!= inPoints.end(); it++)
+		for(deque< pair<double,double> >::iterator it = inPoints.begin()+1 ; it!= inPoints.end(); it++)
 		{
 			x = ( (it->first)*cos(angle) ) - ( (it->second)*sin(angle) );
 			y = ( (it->first)*sin(angle) ) + ( (it->second)*cos(angle) );
@@ -1653,7 +1653,7 @@ void bestBoundingBox(deque<pair<double,double>> inPoints, deque<pair<double,doub
 	}
 
 	
-	map<pair<int,double>,deque<double>>::iterator it = bound.begin();  // the smaller rectangle is the
+	map< pair<int,double>,deque<double> >::iterator it = bound.begin();  // the smaller rectangle is the
 																  // first element of the map
 	angle = (it->first).second;
 	xmin = (it->second[0]);
@@ -1691,8 +1691,8 @@ void bestBoundingBox(deque<pair<double,double>> inPoints, deque<pair<double,doub
 
 
 
-void build_hull(deque<pair<double,double>> raw_points,
-								deque<pair<double,double>> &output)
+void build_hull(deque< pair<double,double> > raw_points,
+								deque< pair<double,double> > &output)
 {
 	if(raw_points.size()<=4)
 	{
@@ -1852,7 +1852,7 @@ void simplifyHull(std::deque< std::pair<double,double> > &input,int numberOfEdge
 	double a1,a2,b1,b2;
 	double x, y, x1, y1, x2, y2;
 	map<double,int> air;
-	map<int,pair<double,double>> newPoint;
+	map< int,pair<double,double> > newPoint;
 	double surface;
 
 	while(size>numberOfEdges)
