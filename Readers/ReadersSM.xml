@@ -85,13 +85,6 @@
       </StringVectorProperty>
 
       <StringVectorProperty
-      name="FileName"
-      command="GetFileName"
-      information_only="1">
-        <SimpleStringInformationHelper/>
-      </StringVectorProperty>
-
-      <StringVectorProperty
         name="TopoFileName"
         command="SetTopoFileName"
         number_of_elements="1"        
@@ -204,13 +197,6 @@
       </StringVectorProperty>
 
       <StringVectorProperty
-      name="FileName"
-      command="GetFileName"
-      information_only="1">
-        <SimpleStringInformationHelper/>
-      </StringVectorProperty>
-
-      <StringVectorProperty
            name="CellArrayInfo"
            information_only="1">
         <ArraySelectionInformationHelper attribute_name="Cell"/>
@@ -245,13 +231,6 @@
         command="SetFileName"
         number_of_elements="1">
         <FileListDomain name="files"/>
-      </StringVectorProperty>
-
-      <StringVectorProperty
-      name="FileName"
-      command="GetFileName"
-      information_only="1">
-        <SimpleStringInformationHelper/>
       </StringVectorProperty>
 
       <StringVectorProperty
@@ -292,13 +271,6 @@
       </StringVectorProperty>
 
       <StringVectorProperty
-      name="FileName"
-      command="GetFileName"
-      information_only="1">
-        <SimpleStringInformationHelper/>
-      </StringVectorProperty>
-
-      <StringVectorProperty
          name="CellArrayInfo"
          information_only="1">
         <ArraySelectionInformationHelper attribute_name="Cell"/>
@@ -333,13 +305,6 @@
         command="SetFileName"
         number_of_elements="1">
         <FileListDomain name="files"/>
-      </StringVectorProperty>
-
-      <StringVectorProperty
-      name="FileName"
-      command="GetFileName"
-      information_only="1">
-        <SimpleStringInformationHelper/>
       </StringVectorProperty>
 
     </SourceProxy>
