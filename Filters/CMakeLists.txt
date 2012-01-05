@@ -54,6 +54,7 @@ TimeThreshold
 TopOfCell
 VTKBultIn
 Ruler
+StringArrayToIndex
 ../common
 
 
@@ -95,6 +96,7 @@ TimeBillboard/vtkTimeBillboard.cxx
 TimeThreshold/vtkTimeThreshold.cxx
 TopOfCell/vtkTopOfCell.cxx
 Ruler/vtkRuler.cxx
+StringArrayToIndex/vtkStringArrayToIndex.cpp
 )
 
 SET( PVGFilters_EXTRA_SRCS

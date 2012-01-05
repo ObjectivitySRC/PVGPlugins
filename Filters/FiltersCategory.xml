@@ -29,8 +29,9 @@
    <Filter name="TimeThreshold"/>
    <Filter name="Top Of Cell"/>
    <Filter name="Volumique Tetrahedralization"/>
-    <Filter name="SumBillboard" />
-    <Filter name="TimeBillboard" />   
+   <Filter name="SumBillboard" />
+   <Filter name="TimeBillboard" />   
+   <Filter name="String Array To Index"/>
    <Filter name="DUMMY_FILTER"/>
  </Category>  
 </ParaViewFilters>
