@@ -26,6 +26,10 @@
 /*                                                                           */
 /*  This file, the paper listed above, and other information are available   */
 /*    from the Web page http://www.cs.cmu.edu/~quake/robust.html .           */
+/*																			 */
+/*																			 */
+/*	As stated on the website "http://www.cs.cmu.edu/~quake/robust.html"		 */
+/*		this code is in the public domain as of January 6, 2012				 */
 /*                                                                           */
 /*****************************************************************************/
 
