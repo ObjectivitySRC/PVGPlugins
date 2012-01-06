@@ -45,13 +45,16 @@
   </ProxyGroup>
   
   <ProxyGroup name="sources">
-    <FileSeriesReaderProxy name="FDEMReader"
-                           class="vtkFileSeriesReader"
-                           label="FEM/DEM Binary Files"
-                           file_name_method="SetFileName">
+    <SourceProxy name="FDEMReader"
+                 class="vtkFileSeriesReader"
+                 label="FEM/DEM Binary Files"
+				 si_class="vtkSIFileSeriesReaderProxy"
+                 file_name_method="SetFileName">
 
       <SubProxy>
-        <Proxy name="Reader" proxygroup="internal_sources" proxyname="FDEMReader"/>
+        <Proxy name="Reader" 
+			   proxygroup="internal_sources"
+			   proxyname="FDEMReader"/>
         <ExposedProperties>
           <Property name="Fills" />
           <Property name="Points" />
@@ -81,8 +84,8 @@
         <Documentation>
           Available timestep values.
         </Documentation>
-      </DoubleVectorProperty>      
-    </FileSeriesReaderProxy>
+      </DoubleVectorProperty>
+    </SourceProxy>
   </ProxyGroup>
 
 

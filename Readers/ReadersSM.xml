@@ -465,19 +465,22 @@
 
     </SourceProxy-->
 
-    <FileSeriesReaderProxy name="FDEMReader"
-                            class="vtkFileSeriesReader"
-                            label="FEM/DEM Binary Files"
-                            file_name_method="SetFileName">
+    <SourceProxy name="FDEMReader"
+                 class="vtkFileSeriesReader"
+                 label="FEM/DEM Binary Files"
+				 si_class="vtkSIFileSeriesReaderProxy"
+                 file_name_method="SetFileName">
 
       <SubProxy>
-        <Proxy name="Reader" proxygroup="internal_sources" proxyname="FDEMReader"/>
+        <Proxy name="Reader" 
+			   proxygroup="internal_sources"
+			   proxyname="FDEMReader"/>
         <ExposedProperties>
           <Property name="Fills" />
           <Property name="Points" />
           <Property name="Cracks" />
           <Property name="Joints" />
-        </ExposedProperties>
+          </ExposedProperties>          
       </SubProxy>
 
       <StringVectorProperty
@@ -502,7 +505,7 @@
           Available timestep values.
         </Documentation>
       </DoubleVectorProperty>
-    </FileSeriesReaderProxy>
+    </SourceProxy>
 
     <SourceProxy name="GocadReader"
             class="vtkGocadReader">
