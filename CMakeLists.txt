@@ -91,7 +91,7 @@ ENDMACRO(paraview_build_optional_plugin)
 OPTION(ParaViewGeo_Filters "Build ParaViewGeo Filters" ON)
 OPTION(ParaViewGeo_Readers "Build ParaViewGeo Readers" ON)
 OPTION(ParaViewGeo_Writers "Build ParaViewGeo Writers" ON)
-OPTION(Build_Non_BSD_Plugins "Build ParaViewGeo Non-BSD Licensed Plugins" OFF)
+OPTION(ParaViewGeo_NonBSDPlugins "Build ParaViewGeo Non-BSD Licensed Plugins" OFF)
 
 IF (ParaViewGeo_Filters)
 	ADD_SUBDIRECTORY(Filters)
@@ -105,9 +105,9 @@ IF(ParaViewGeo_Writers)
 	ADD_SUBDIRECTORY(Writers)
 ENDIF(ParaViewGeo_Writers)
 
-IF(Build_Non_BSD_Plugins)
+IF(ParaViewGeo_NonBSDPlugins)
 	ADD_SUBDIRECTORY(NonBSDPlugins)
-ENDIF(Build_Non_BSD_Plugins)
+ENDIF(ParaViewGeo_NonBSDPlugins)
 
 #########################################################################
 # the name that appears in the installation wizard
@@ -120,6 +120,6 @@ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "ParaViewGeo Plugins")
 set(CPACK_PACKAGE_VERSION ${PVGPlugins_VERSION_FULL})
 
 
-set(CPACK_COMPONENTS_ALL Filters Readers Writers NonBSDPlugins)
+set(CPACK_COMPONENTS_ALL PVGFilters PVGReaders PVGWriters PVGNonBSDPlugins)
 
 include (CPack)
