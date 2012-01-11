@@ -120,6 +120,6 @@ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "ParaViewGeo Plugins")
 set(CPACK_PACKAGE_VERSION ${PVGPlugins_VERSION_FULL})
 
 
-set(CPACK_COMPONENTS_ALL PVGFilters PVGReaders PVGWriters)
+set(CPACK_COMPONENTS_ALL Filters Readers Writers NonBSDPlugins)
 
 include (CPack)
