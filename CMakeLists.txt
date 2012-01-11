@@ -91,6 +91,7 @@ ENDMACRO(paraview_build_optional_plugin)
 OPTION(ParaViewGeo_Filters "Build ParaViewGeo Filters" ON)
 OPTION(ParaViewGeo_Readers "Build ParaViewGeo Readers" ON)
 OPTION(ParaViewGeo_Writers "Build ParaViewGeo Writers" ON)
+OPTION(Build_Non_BSD_Plugins "Build ParaViewGeo Non-BSD Licensed Plugins" OFF)
 
 IF (ParaViewGeo_Filters)
 	ADD_SUBDIRECTORY(Filters)
@@ -104,6 +105,9 @@ IF(ParaViewGeo_Writers)
 	ADD_SUBDIRECTORY(Writers)
 ENDIF(ParaViewGeo_Writers)
 
+IF(Build_Non_BSD_Plugins)
+	ADD_SUBDIRECTORY(NonBSDPlugins)
+ENDIF(Build_Non_BSD_Plugins)
 
 #########################################################################
 # the name that appears in the installation wizard

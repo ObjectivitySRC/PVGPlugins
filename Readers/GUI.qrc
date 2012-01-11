@@ -1,6 +1,5 @@
 <RCC>
   <qresource prefix="/PVGReaders">
-    <file>DataMineReader/pqDMWireFrameReader.ui</file>
     <file>DrillHoleReader/pqDrillHoleReader.ui</file>
     <file>PointSetReader/pqPointSetReader.ui</file>
     <file>SOTResult/pqSOTResult.ui</file>

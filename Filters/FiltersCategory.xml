@@ -2,11 +2,9 @@
  <Category name="Objectivity">
    <!-- Keep this in alphabetical order -->
    <Filter name="Add Points" />
-   <Filter name="Annotate Volume" />
    <Filter name="Apply Schedule"/>
    <Filter name="Bounding Box"/>
    <Filter name="Clean Cells"/>
-   <Filter name="Compute Volumes"/>
    <Filter name="ConvertPointsToBlocks"/>
    <Filter name="ExtractPolyData"/>
    <Filter name="ExtractUnstrucGrid"/>
@@ -28,7 +26,6 @@
    <Filter name="Tensor Glyph"/>
    <Filter name="TimeThreshold"/>
    <Filter name="Top Of Cell"/>
-   <Filter name="Volumique Tetrahedralization"/>
    <Filter name="SumBillboard" />
    <Filter name="TimeBillboard" />   
    <Filter name="String Array To Index"/>

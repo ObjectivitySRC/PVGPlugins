@@ -198,7 +198,7 @@ void vtkApplySchedule::parseProperties(ifstream& myFile)
 int vtkApplySchedule::RequestData(vtkInformation *vtkNotUsed(request), 
 	vtkInformationVector **inputVector, vtkInformationVector *outputVector)
 {
-	this->resetProperties = true;
+		this->resetProperties = true;
 
   // get the info objects
   vtkInformation *inInfo = inputVector[0]->GetInformationObject(0);

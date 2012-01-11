@@ -1,7 +1,7 @@
 <ServerManagerConfiguration>
   <!-- Begin StringPropertyToIndex -->
   <ProxyGroup name="filters">
-    <SourceProxy name="String Array to Index" class="vtkStringArrayToIndex">
+	<SourceProxy name="String Array To Index" class="vtkStringArrayToIndex">
 	
       <InputProperty
         name="Input"
@@ -11,8 +11,8 @@
           <Group name="filters"/>
         </ProxyGroupDomain>        
         <DataTypeDomain name="input_type">
-          <DataType value="vtkDataSet"/>       
-        </DataTypeDomain>        
+          <DataType value="vtkDataSet"/>
+        </DataTypeDomain>
         <InputArrayDomain name="input_array_1" number_of_components="1">
           <RequiredProperties>
             <Property name="SelectInputScalars"
@@ -42,7 +42,7 @@
       command="SetIndexName"
 	  label="Index Name:"
       number_of_elements="1"
-      default_values="">
+      default_values="Enter Name">
     </StringVectorProperty>
 
     </SourceProxy>

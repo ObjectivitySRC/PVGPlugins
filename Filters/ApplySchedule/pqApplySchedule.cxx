@@ -11,7 +11,7 @@
 
 
 pqApplySchedule::pqApplySchedule(pqProxy* pxy, QWidget* p) :
-  pqLoadedFormObjectPanel(":/StableFilters/ApplySchedule/pqApplySchedule.ui", pxy, p)
+  pqLoadedFormObjectPanel(":/PVGFilters/ApplySchedule/pqApplySchedule.ui", pxy, p)
   {
 		this->QVTKConnect = vtkSmartPointer<vtkEventQtSlotConnect>::New();
 		this->ArraySelection = vtkSMStringVectorProperty::SafeDownCast(

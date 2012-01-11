@@ -7,6 +7,8 @@
 #include "vtkCellData.h"
 
 #include <map>
+#include <string>
+#include <algorithm>
 
 vtkCxxRevisionMacro(vtkStringArrayToIndex, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtkStringArrayToIndex);
@@ -57,6 +59,37 @@ int vtkStringArrayToIndex::RequestData(vtkInformation *request,
 	{
 		vtkErrorMacro("The selected data array is invalid: Probably not a string type.");
 		return 1;
+	}
+
+	// check that the given name doesn't exist in the property arrays
+	std::string iname = this->IndexName;
+	std::transform(iname.begin(), iname.end(), iname.begin(), ::tolower);
+
+	if (type == "Cell")
+	{
+		for (int i = 0; i < this->input->GetCellData()->GetNumberOfArrays(); i++)
+		{
+			std::string name = this->input->GetCellData()->GetArrayName(i);
+			std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+			if (name == iname)
+			{
+				vtkErrorMacro("Name already exists in properties. Please select a unique name.");
+				return 1;
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < this->input->GetPointData()->GetNumberOfArrays(); i++)
+		{
+			std::string name = this->input->GetPointData()->GetArrayName(i);
+			std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+			if (name == iname)
+			{
+				vtkErrorMacro("Name already exists in properties. Please select a unique name.");
+				return 1;
+			}
+		}
 	}
 
 	vtkIntArray* indexArray = vtkIntArray::New();

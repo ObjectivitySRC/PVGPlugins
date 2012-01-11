@@ -26,7 +26,7 @@ ${QtPython_SOURCE_DIR}
 ${QtPython_BINARY_DIR}
 ArcMapReader
 BlockModelReader
-DataMineReader
+#DataMineReader
 DrillHoleReader
 DXFReader
 Ellipsoid
@@ -48,29 +48,16 @@ LineNetworkReader
 
 )
 
-
-
-# Only include directories if on Windows platform
-IF(PV_WIN32)
-	INCLUDE_DIRECTORIES(
-	VulcanReader
-	MineSightReader
-	GeoReferencedImage
-	GeoReferencedImage/geotiff/include
-	GeoReferencedImage/geotiff/lib
-	)
-ENDIF(PV_WIN32)
-
 SET( PVGReaders_SM_SRCS
 ArcMapReader/vtkArcMapReader.cxx
 BlockModelReader/vtkBlockModelReader.cxx
-DataMineReader/vtkDataMineDummyReader.cxx 
-DataMineReader/vtkDataMineWireFrameReader.cxx 
-DataMineReader/vtkDataMinePerimeterReader.cxx  
-DataMineReader/vtkDataMinePointReader.cxx  
-DataMineReader/vtkDataMineBlockReader.cxx 
-DataMineReader/vtkDataMineDrillHoleReader.cxx  
-DataMineReader/vtkDataMineReader.cxx 
+#DataMineReader/vtkDataMineDummyReader.cxx 
+#DataMineReader/vtkDataMineWireFrameReader.cxx 
+#DataMineReader/vtkDataMinePerimeterReader.cxx  
+#DataMineReader/vtkDataMinePointReader.cxx  
+#DataMineReader/vtkDataMineBlockReader.cxx 
+#DataMineReader/vtkDataMineDrillHoleReader.cxx  
+#DataMineReader/vtkDataMineReader.cxx 
 DrillHoleReader/vtkDrillHoleReader.cxx
 DXFReader/vtkDXFReader.cxx
 Ellipsoid/vtkEllipsoid.cxx 
@@ -98,33 +85,10 @@ TriReader/vtkTriReader.cxx
 LineNetworkReader/vtkLineNetworkReader.cpp
 )
 
-# Include .cxx files in on Windows platform
-IF(PV_WIN32)
-
-  SET( WIN_SM_SRCS
-	VulcanReader/vtkVulcanTriReader.cxx
-	VulcanReader/vtkVulcanGridReader.cxx
-	VulcanReader/vtkVulcanBlockModelReader.cxx
-	MineSightReader/vtkMineSightReader.cxx
-	GeoReferencedImage/vtkGeoReferencedImageReader.cxx
-	)
-
-  FILE(GLOB GEOTIFF_EXTRAS1 "${CMAKE_CURRENT_SOURCE_DIR}/GeoReferencedImage/geotiff/include/*.c")
-  FILE(GLOB GEOTIFF_EXTRAS2 "${CMAKE_CURRENT_SOURCE_DIR}/GeoReferencedImage/geotiff/include/*.h")
-  FILE(GLOB GEOTIFF_EXTRAS3 "${CMAKE_CURRENT_SOURCE_DIR}/GeoReferencedImage/geotiff/lib/*.lib")
-
-  # Only add GeoTiff if on Windows
-  SET( WIN_SM_EXTRA_SRCS
-	${GEOTIFF_EXTRAS1}
-	${GEOTIFF_EXTRAS2}
-	${GEOTIFF_EXTRAS3}
-	)
-ENDIF(PV_WIN32)
-
 SET( PVGReaders_EXTRA_SRCS
-DataMineReader/dmfile.cxx
-DataMineReader/PropertyStorage.cxx
-DataMineReader/PointMap.cxx
+#DataMineReader/dmfile.cxx
+#DataMineReader/PropertyStorage.cxx
+#DataMineReader/PointMap.cxx
 DXFReader/vtkDXFObject.cxx 
 DXFReader/vtkDXFLayer.cxx 
 DXFReader/vtkDXFParser.cxx 
@@ -147,7 +111,7 @@ ShapeFileReader/mgexcept.cxx
 )
 
 SET(PVGReaders_GUI_SRCS
-DataMineReader/pqDataMineWireFrameReader.cxx
+#DataMineReader/pqDataMineWireFrameReader.cxx
 DrillHoleReader/pqDrillHoleReader.cxx
 #EPSReader/pqEPSReader.cxx
 FLAC3DReader/pqFLAC3DReader.cpp
@@ -159,7 +123,7 @@ LineNetworkReader/pqLineNetworkReader.cxx
 )
 
 SET(MOC_LIST
-DataMineReader/pqDataMineWireFrameReader.h
+#DataMineReader/pqDataMineWireFrameReader.h
 DrillHoleReader/pqDrillHoleReader.h
 #EPSReader/pqEPSReader.h
 FLAC3DReader/pqFLAC3DReader.h
@@ -173,23 +137,9 @@ LineNetworkReader/pqLineNetworkReader.h
 #wrap the moc for the cross platform stuff
 QT4_WRAP_CPP(MOC_SRCS ${MOC_LIST})
 
-#create mocs, and wrap for windows only
-IF(PV_WIN32)
- # Only add GeoTiff if on Windows
-  SET( WIN_GUI_SRCS
-	GeoReferencedImage/pqGeoReferencedImageReader.cxx
-	)
-  
-  SET( WIN_MOC_LIST
-	GeoReferencedImage/pqGeoReferencedImageReader.h
-	)
-	QT4_WRAP_CPP(WIN_MOC_SRCS ${WIN_MOC_LIST})
-ENDIF(PV_WIN32)
 
-
-
-ADD_PARAVIEW_OBJECT_PANEL(IFACES IFACE_SRCS CLASS_NAME pqDataMineWireFrameReader
-                         XML_NAME DataMineWireFrameReader XML_GROUP sources)
+#ADD_PARAVIEW_OBJECT_PANEL(IFACES IFACE_SRCS CLASS_NAME pqDataMineWireFrameReader
+#                         XML_NAME DataMineWireFrameReader XML_GROUP sources)
 
 #ADD_PARAVIEW_OBJECT_PANEL(IFACES2 IFACE_SRCS2 CLASS_NAME pqEPSReader
 #                         XML_NAME SOTEPSReader XML_GROUP sources)
@@ -215,12 +165,6 @@ ADD_PARAVIEW_OBJECT_PANEL(IFACES9 IFACE_SRCS9 CLASS_NAME pqFLAC3DReader
 
 ADD_PARAVIEW_OBJECT_PANEL(IFACES10 IFACE_SRCS10 CLASS_NAME pq3DECReader
                          XML_NAME 3DECReader XML_GROUP sources)																 
-
-# Only add GeoTiff if on Windows
-IF(PV_WIN32)
-	ADD_PARAVIEW_OBJECT_PANEL(WIN_IFACES WIN_IFACE_SRCS CLASS_NAME pqGeoReferencedImageReader
-		                  XML_NAME GeoReferencedImageReader XML_GROUP sources)
-ENDIF(PV_WIN32)
 
 # Append EPSReader panel
 #LIST(APPEND IFACES ${IFACES2})
@@ -291,8 +235,6 @@ ADD_PARAVIEW_PLUGIN(PVGReadersCPlugin "1.0"
 #ENDIF (PVG_BUILD_ODBC)
 ##############################################################	
 
-
-
 #CPACK CODE TO BUNDLE THE DLLS CORRECTLY
 INSTALL(TARGETS PVGReadersSMPlugin PVGReadersGUIPlugin PVGReadersCPlugin
 	RUNTIME DESTINATION bin/plugins COMPONENT Runtime
@@ -303,81 +245,7 @@ INSTALL(TARGETS PVGReadersSMPlugin PVGReadersGUIPlugin PVGReadersCPlugin
 set(CPACK_COMPONENT_PVGREADERS_DISPLAY_NAME "ParaViewGeo Readers")  
 set(CPACK_COMPONENT_PVGREADERS_DESCRIPTION 
    "Readers for importing mining data into ParaView")
-	
 
-# Build Vulcan/MineSight plugins on Windows platform
-IF(PV_WIN32)
-	ADD_PARAVIEW_PLUGIN(WindowsReadersSMPlugin "1.0"
-        SERVER_MANAGER_XML WindowsReadersSM.xml
-        SERVER_MANAGER_SOURCES  ${WIN_SM_SRCS}
-        SERVER_SOURCES ${WIN_SM_EXTRA_SRCS}
-        )
-        
-	ADD_PARAVIEW_PLUGIN(WindowsReadersCPlugin "1.0"
-		GUI_RESOURCE_FILES WindowsReadersClient.xml
-		)
-
-	ADD_PARAVIEW_PLUGIN(WindowsReadersGUIPlugin "1.0"
-		GUI_INTERFACES ${WIN_IFACES} 
-        GUI_RESOURCES WinGUI.qrc
-        SOURCES ${WIN_GUI_SRCS} ${WIN_MOC_SRCS} ${WIN_IFACE_SRCS}
-		)
-    
-	LINK_DIRECTORIES (${CMAKE_CURRENT_SOURCE_DIR}/VulcanReader/lib)
-	LINK_DIRECTORIES (${CMAKE_CURRENT_SOURCE_DIR}/MineSightReader/lib)
-	
-	target_link_libraries (WindowsReadersSMPlugin ${CMAKE_CURRENT_SOURCE_DIR}/VulcanReader/lib/mtkExportedDGD.lib )
-	target_link_libraries (WindowsReadersSMPlugin ${CMAKE_CURRENT_SOURCE_DIR}/VulcanReader/lib/mtkExportedBlockModel.lib )
-	target_link_libraries (WindowsReadersSMPlugin ${CMAKE_CURRENT_SOURCE_DIR}/VulcanReader/lib/mtkExportedGrid.lib )
-	target_link_libraries (WindowsReadersSMPlugin ${CMAKE_CURRENT_SOURCE_DIR}/VulcanReader/lib/mtkExportedTri.lib )
-	target_link_libraries (WindowsReadersSMPlugin ${CMAKE_CURRENT_SOURCE_DIR}/MineSightReader/lib/mintecMSDAL-vc8.lib)
-		
-	#CPACK CODE TO BUNDLE THE DLLS CORRECTLY	
-	INSTALL(TARGETS WindowsReadersSMPlugin WindowsReadersCPlugin WindowsReadersGUIPlugin
-		RUNTIME DESTINATION bin/plugins COMPONENT Runtime
-		LIBRARY DESTINATION bin/plugins 
-		ARCHIVE DESTINATION bin/plugins 
-		)	
-	
-	#SPECIAL CODE JUST FOR VULCAN
-	#TO COPY THE EXTRA DLLS/INCLUDES OVER	
-	FILE(GLOB CPACK_VULCAN_LIB "${CMAKE_CURRENT_SOURCE_DIR}/VulcanReader/lib/*.lib")
-	FILE(GLOB CPACK_VULCAN_DLLS "${CMAKE_CURRENT_SOURCE_DIR}/VulcanReader/lib/*.dll")
-	FILE(GLOB CPACK_VULCAN_MANIFEST "${CMAKE_CURRENT_SOURCE_DIR}/VulcanReader/lib/*.manifest")
-	LIST(APPEND CPACK_VULCAN_EXTRAS ${CPACK_VULCAN_DLLS} ${CPACK_VULCAN_LIB} ${CPACK_VULCAN_MANIFEST})
-
-	INSTALL(FILES ${CPACK_VULCAN_EXTRAS}
-		DESTINATION bin
-		COMPONENT Runtime
-		)	
-	
-	#MINESIGHT
-	FILE(GLOB MINESIGHT_LIB "${CMAKE_CURRENT_SOURCE_DIR}/MineSightReader/lib/*.lib")
-	FILE(GLOB MINESIGHT_DLLS "${CMAKE_CURRENT_SOURCE_DIR}/MineSightReader/lib/*.dll")
-	LIST(APPEND MINESIGHT_EXTRAS ${MINESIGHT_LIB} ${MINESIGHT_DLLS})
-			
-	INSTALL(FILES ${MINESIGHT_EXTRAS}
-		DESTINATION bin
-		COMPONENT Runtime		
-		)
-
-	LINK_DIRECTORIES ( ${CMAKE_CURRENT_SOURCE_DIR}/GeoReferencedImage/geotiff/lib )
-
-	# LINK GEOTIFF LIBRARIES
-	target_link_libraries (WindowsReadersSMPlugin ${CMAKE_CURRENT_SOURCE_DIR}/GeoReferencedImage/geotiff/lib/geotiff_i.lib )
-	target_link_libraries (WindowsReadersSMPlugin ${CMAKE_CURRENT_SOURCE_DIR}/GeoReferencedImage/geotiff/lib/libtiff_i.lib )
-	  
-	#SPECIAL CODE JUST FOR GEOTIFF
-	#TO COPY THE EXTRA DLLS/INCLUDES OVER	
-	FILE(GLOB CPACK_GEOTIFF_LIB "${CMAKE_CURRENT_SOURCE_DIR}/GeoReferencedImage/geotiff/lib/*.lib")
-	FILE(GLOB CPACK_GEOTIFF_DLL "${CMAKE_CURRENT_SOURCE_DIR}/GeoReferencedImage/geotiff/bin/*.dll")
-	LIST(APPEND CPACK_GEOTIFF_EXTRAS ${CPACK_GEOTIFF_LIB} ${CPACK_GEOTIFF_DLL}) 
-	
-	INSTALL(FILES ${CPACK_GEOTIFF_EXTRAS}
-	  DESTINATION bin
-	  COMPONENT Runtime
-	  )
-ENDIF(PV_WIN32)
 ENDIF(QT4_FOUND)
 
 		

@@ -23,10 +23,8 @@ ${QtTesting_BINARY_DIR}
 ${QtPython_SOURCE_DIR}
 ${QtPython_BINARY_DIR}
 ApplySchedule
-AnnotateVolume
 BoundingBox
 CleanCells
-ComputeVolumes
 ConvertPointsToBlocks
 ExtractDataType
 FitDataset
@@ -48,7 +46,6 @@ SharedCode
 SumBillboard
 SurfaceReconstructor
 TensorGlyph
-tetgen
 TimeBillboard
 TimeThreshold
 TopOfCell
@@ -56,16 +53,12 @@ VTKBultIn
 Ruler
 StringArrayToIndex
 ../common
-
-
 )
 
 SET( PVGFilters_SM_SRCS
 ApplySchedule/vtkApplySchedule.cxx
-AnnotateVolume/vtkAnnotateVolume.cxx
 BoundingBox/vtkBBox.cxx
 CleanCells/vtkCleanCells.cxx
-ComputeVolumes/vtkComputeVolumes.cxx
 ConvertPointsToBlocks/vtkConvertPointsToBlocks.cxx
 ExtractDataType/vtkExtractPolyData.cxx
 ExtractDataType/vtkExtractUnstrucGrid.cxx
@@ -91,7 +84,6 @@ SequenceArrows/vtkSequenceArrows.cxx
 SumBillboard/vtkSumBillboard.cxx
 SurfaceReconstructor/vtkSurfaceReconstructor.cxx
 TensorGlyph/vtkTensorGlyphFilter.cxx
-tetgen/vtkTetgen.cxx
 TimeBillboard/vtkTimeBillboard.cxx
 TimeThreshold/vtkTimeThreshold.cxx
 TopOfCell/vtkTopOfCell.cxx
@@ -100,8 +92,6 @@ StringArrayToIndex/vtkStringArrayToIndex.cpp
 )
 
 SET( PVGFilters_EXTRA_SRCS
-tetgen/tetgen.cxx
-tetgen/predicates.cxx
 SharedCode/TimeConverter.cxx
 ../common/vtkCoordinateSystemMapper.cpp
 FitDataset/vtkConvexHull.cpp
@@ -113,11 +103,9 @@ Mine24DtoMap3D/Segments.cpp
 SET( PVGFilters_GUI_SRCS
 ApplySchedule/pqApplySchedule.cxx
 BoundingBox/pqBoundingBox.cxx 
-ComputeVolumes/pqComputeVolumes.cxx
 ConvertPointsToBlocks/pqConvertPointsToBlocks.cxx
 RegexThreshold/pqRegexThreshold.cxx
 SumBillboard/pqSumBillboardPanel.cxx
-tetgen/pqTetgen.cxx
 TimeThreshold/pqTimeThreshold.cxx
 #PlotPropertiesOverTime/pqPlotPropertiesOverTime.cxx
 #PlotPropertiesOverTime/pqPlotPropertiesOverTimePanel.cxx
@@ -131,15 +119,10 @@ Mine24DtoMap3D/pqMine24DtoMap3D.cxx
 SET(MOC_LIST
 ApplySchedule/pqApplySchedule.h
 BoundingBox/pqBoundingBox.h
-ComputeVolumes/pqComputeVolumes.h
 ConvertPointsToBlocks/pqConvertPointsToBlocks.h
 RegexThreshold/pqRegexThreshold.h
 SumBillboard/pqSumBillboardPanel.h
-tetgen/pqTetgen.h
 TimeThreshold/pqTimeThreshold.h
-#PlotPropertiesOverTime/pqPlotPropertiesOverTime.h
-#PlotPropertiesOverTime/pqPlotPropertiesOverTimePanel.h
-#PlotPropertiesOverTime/pqLabelFormatter.h
 RadialDistance/pqRadialDistanceWidget.h
 Ruler/pqRuler.h
 Mine24DtoMap3D/pqMine24DtoMap3D.h
@@ -148,43 +131,31 @@ Mine24DtoMap3D/pqMine24DtoMap3D.h
 QT4_WRAP_CPP(MOC_SRCS ${MOC_LIST})
 
 ADD_PARAVIEW_OBJECT_PANEL(IFACES IFACE_SRCS CLASS_NAME pqApplySchedule
-                         XML_NAME "Apply Schedule" XML_GROUP filters)
+                        XML_NAME "Apply Schedule" XML_GROUP filters)
 
 ADD_PARAVIEW_OBJECT_PANEL(IFACES2 IFACE_SRCS2 CLASS_NAME pqBoundingBox
-                         XML_NAME "Bounding Box" XML_GROUP filters)
-                         
-ADD_PARAVIEW_OBJECT_PANEL(IFACES3 IFACE_SRCS3 CLASS_NAME pqComputeVolumes
-                         XML_NAME "Compute Volumes" XML_GROUP filters)
-                         
-ADD_PARAVIEW_OBJECT_PANEL(IFACES4 IFACE_SRCS4 CLASS_NAME pqRegexThreshold
-                          XML_NAME RegexThreshold XML_GROUP filters)
+                        XML_NAME "Bounding Box" XML_GROUP filters)
+                                     
+ADD_PARAVIEW_OBJECT_PANEL(IFACES3 IFACE_SRCS3 CLASS_NAME pqRegexThreshold
+                        XML_NAME RegexThreshold XML_GROUP filters)
 
-ADD_PARAVIEW_OBJECT_PANEL(IFACES5 IFACE_SRCS5 CLASS_NAME pqSumBillboardPanel
-                         XML_NAME SumBillboard XML_GROUP filters)  
+ADD_PARAVIEW_OBJECT_PANEL(IFACES4 IFACE_SRCS4 CLASS_NAME pqSumBillboardPanel
+                        XML_NAME SumBillboard XML_GROUP filters)  
                                                    
-ADD_PARAVIEW_OBJECT_PANEL(IFACES6 IFACE_SRCS6 CLASS_NAME pqTetgen
-                         XML_NAME "Volumique Tetrahedralization" XML_GROUP filters)
+ADD_PARAVIEW_OBJECT_PANEL(IFACES5 IFACE_SRCS5 CLASS_NAME pqTimeThreshold
+                        XML_NAME TimeThreshold XML_GROUP filters)
+                                                 
+ADD_PARAVIEW_OBJECT_PANEL(IFACES6 IFACE_SRCS6 CLASS_NAME pqRadialDistanceWidget
+                        XML_NAME "Radial Distance" XML_GROUP filters)
 
-ADD_PARAVIEW_OBJECT_PANEL(IFACES7 IFACE_SRCS7 CLASS_NAME pqTimeThreshold
-                         XML_NAME TimeThreshold XML_GROUP filters)
-                         
-#ADD_PARAVIEW_OBJECT_PANEL(IFACES8 IFACE_SRCS8 CLASS_NAME pqPlotPropertiesOverTimePanel
-#                         XML_NAME "Plot Properties Over Time" XML_GROUP filters)
- 
-#ADD_PARAVIEW_VIEW_MODULE(IFACES9 IFACE_SRCS9 VIEW_TYPE pqPlotPropertiesOverTime
-#                         VIEW_XML_GROUP views)
-                         
-ADD_PARAVIEW_OBJECT_PANEL(IFACES10 IFACE_SRCS10 CLASS_NAME pqRadialDistanceWidget
-                         XML_NAME "Radial Distance" XML_GROUP filters)
+ADD_PARAVIEW_OBJECT_PANEL(IFACES7 IFACE_SRCS7 CLASS_NAME pqConvertPointsToBlocks
+                        XML_NAME ConvertPointsToBlocks XML_GROUP filters)
 
-ADD_PARAVIEW_OBJECT_PANEL(IFACES11 IFACE_SRCS11 CLASS_NAME pqConvertPointsToBlocks
-                         XML_NAME ConvertPointsToBlocks XML_GROUP filters)
+ADD_PARAVIEW_OBJECT_PANEL(IFACES8 IFACE_SRCS8 CLASS_NAME 	pqRuler
+						XML_NAME "Ruler" XML_GROUP filters)    
 
-ADD_PARAVIEW_OBJECT_PANEL(IFACES12 IFACE_SRCS12 CLASS_NAME 	pqRuler
-  XML_NAME "Ruler" XML_GROUP filters)    
-
-ADD_PARAVIEW_OBJECT_PANEL(IFACES IFACE_SRCS CLASS_NAME pqMine24DtoMap3D
-                         XML_NAME "Mine24D to Map3D" XML_GROUP filters)  
+ADD_PARAVIEW_OBJECT_PANEL(IFACES9 IFACE_SRCS9 CLASS_NAME pqMine24DtoMap3D
+                        XML_NAME "Mine24D to Map3D" XML_GROUP filters)  
 
 LIST(APPEND IFACES ${IFACES2})
 LIST(APPEND IFACES ${IFACES3})
@@ -194,9 +165,7 @@ LIST(APPEND IFACES ${IFACES6})
 LIST(APPEND IFACES ${IFACES7})
 LIST(APPEND IFACES ${IFACES8})
 LIST(APPEND IFACES ${IFACES9})
-LIST(APPEND IFACES ${IFACES10})
-LIST(APPEND IFACES ${IFACES11})
-LIST(APPEND IFACES ${IFACES12})
+
 LIST(APPEND IFACE_SRCS ${IFACE_SRCS2})
 LIST(APPEND IFACE_SRCS ${IFACE_SRCS3})
 LIST(APPEND IFACE_SRCS ${IFACE_SRCS4})
@@ -205,9 +174,6 @@ LIST(APPEND IFACE_SRCS ${IFACE_SRCS6})
 LIST(APPEND IFACE_SRCS ${IFACE_SRCS7})
 LIST(APPEND IFACE_SRCS ${IFACE_SRCS8})
 LIST(APPEND IFACE_SRCS ${IFACE_SRCS9})
-LIST(APPEND IFACE_SRCS ${IFACE_SRCS10})
-LIST(APPEND IFACE_SRCS ${IFACE_SRCS11})
-LIST(APPEND IFACE_SRCS ${IFACE_SRCS12})
 
 ADD_PARAVIEW_PLUGIN(PVGFiltersSMPlugin "1.0"
 			SERVER_MANAGER_XML FiltersSM.xml
@@ -225,7 +191,6 @@ ADD_PARAVIEW_PLUGIN(PVGFiltersCPlugin  "1.0"
 			GUI_RESOURCE_FILES FiltersCategory.xml)			
 
 ENDIF(QT4_FOUND)
-
 
 #CPACK CODE TO BUNDLE THE DLLS CORRECTLY
 INSTALL(TARGETS PVGFiltersGUIPlugin PVGFiltersSMPlugin PVGFiltersCPlugin  
