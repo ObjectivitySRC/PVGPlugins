@@ -6,8 +6,6 @@ IF(QT4_FOUND)
 
 INCLUDE(${QT_USE_FILE})
 
-
-
 INCLUDE_DIRECTORIES(
 ${VTK_INCLUDE_DIR}
 ${PARAVIEW_INCLUDE_DIRS}
@@ -26,7 +24,6 @@ ${QtPython_SOURCE_DIR}
 ${QtPython_BINARY_DIR}
 ArcMapReader
 BlockModelReader
-#DataMineReader
 DrillHoleReader
 DXFReader
 Ellipsoid
@@ -51,13 +48,6 @@ LineNetworkReader
 SET( PVGReaders_SM_SRCS
 ArcMapReader/vtkArcMapReader.cxx
 BlockModelReader/vtkBlockModelReader.cxx
-#DataMineReader/vtkDataMineDummyReader.cxx 
-#DataMineReader/vtkDataMineWireFrameReader.cxx 
-#DataMineReader/vtkDataMinePerimeterReader.cxx  
-#DataMineReader/vtkDataMinePointReader.cxx  
-#DataMineReader/vtkDataMineBlockReader.cxx 
-#DataMineReader/vtkDataMineDrillHoleReader.cxx  
-#DataMineReader/vtkDataMineReader.cxx 
 DrillHoleReader/vtkDrillHoleReader.cxx
 DXFReader/vtkDXFReader.cxx
 Ellipsoid/vtkEllipsoid.cxx 
@@ -86,9 +76,6 @@ LineNetworkReader/vtkLineNetworkReader.cpp
 )
 
 SET( PVGReaders_EXTRA_SRCS
-#DataMineReader/dmfile.cxx
-#DataMineReader/PropertyStorage.cxx
-#DataMineReader/PointMap.cxx
 DXFReader/vtkDXFObject.cxx 
 DXFReader/vtkDXFLayer.cxx 
 DXFReader/vtkDXFParser.cxx 
@@ -111,7 +98,6 @@ ShapeFileReader/mgexcept.cxx
 )
 
 SET(PVGReaders_GUI_SRCS
-#DataMineReader/pqDataMineWireFrameReader.cxx
 DrillHoleReader/pqDrillHoleReader.cxx
 #EPSReader/pqEPSReader.cxx
 FLAC3DReader/pqFLAC3DReader.cpp
@@ -123,7 +109,6 @@ LineNetworkReader/pqLineNetworkReader.cxx
 )
 
 SET(MOC_LIST
-#DataMineReader/pqDataMineWireFrameReader.h
 DrillHoleReader/pqDrillHoleReader.h
 #EPSReader/pqEPSReader.h
 FLAC3DReader/pqFLAC3DReader.h
@@ -136,63 +121,46 @@ LineNetworkReader/pqLineNetworkReader.h
 
 #wrap the moc for the cross platform stuff
 QT4_WRAP_CPP(MOC_SRCS ${MOC_LIST})
-
-
-#ADD_PARAVIEW_OBJECT_PANEL(IFACES IFACE_SRCS CLASS_NAME pqDataMineWireFrameReader
-#                         XML_NAME DataMineWireFrameReader XML_GROUP sources)
-
-#ADD_PARAVIEW_OBJECT_PANEL(IFACES2 IFACE_SRCS2 CLASS_NAME pqEPSReader
-#                         XML_NAME SOTEPSReader XML_GROUP sources)
                          
-ADD_PARAVIEW_OBJECT_PANEL(IFACES3 IFACE_SRCS3 CLASS_NAME pqSOTResult
+ADD_PARAVIEW_OBJECT_PANEL(IFACES IFACE_SRCS CLASS_NAME pqSOTResult
                          XML_NAME SOTResult XML_GROUP sources)
                          
-ADD_PARAVIEW_OBJECT_PANEL(IFACES4 IFACE_SRCS4 CLASS_NAME pqDrillHoleReader
+ADD_PARAVIEW_OBJECT_PANEL(IFACES1 IFACE_SRCS1 CLASS_NAME pqDrillHoleReader
                          XML_NAME DrillHoleReader XML_GROUP sources)
 						 
-ADD_PARAVIEW_OBJECT_PANEL(IFACES5 IFACE_SRCS5 CLASS_NAME pqPointSetReader
+ADD_PARAVIEW_OBJECT_PANEL(IFACES2 IFACE_SRCS2 CLASS_NAME pqPointSetReader
                          XML_NAME PointSetReader XML_GROUP sources)	
 
-ADD_PARAVIEW_OBJECT_PANEL(IFACES6 IFACE_SRCS6 CLASS_NAME pqGocadReader
+ADD_PARAVIEW_OBJECT_PANEL(IFACES3 IFACE_SRCS3 CLASS_NAME pqGocadReader
                          XML_NAME GocadReader XML_GROUP sources)	
 
-ADD_PARAVIEW_OBJECT_PANEL(IFACES7 IFACE_SRCS7 CLASS_NAME pqLineNetworkReader
+ADD_PARAVIEW_OBJECT_PANEL(IFACES4 IFACE_SRCS4 CLASS_NAME pqLineNetworkReader
                          XML_NAME LineNetworkReader XML_GROUP sources)		
 		
-
-ADD_PARAVIEW_OBJECT_PANEL(IFACES9 IFACE_SRCS9 CLASS_NAME pqFLAC3DReader
+ADD_PARAVIEW_OBJECT_PANEL(IFACES5 IFACE_SRCS5 CLASS_NAME pqFLAC3DReader
                          XML_NAME FLAC3DReader XML_GROUP sources)				
 
-ADD_PARAVIEW_OBJECT_PANEL(IFACES10 IFACE_SRCS10 CLASS_NAME pq3DECReader
+ADD_PARAVIEW_OBJECT_PANEL(IFACES6 IFACE_SRCS6 CLASS_NAME pq3DECReader
                          XML_NAME 3DECReader XML_GROUP sources)																 
 
-# Append EPSReader panel
-#LIST(APPEND IFACES ${IFACES2})
-#LIST(APPEND IFACE_SRCS ${IFACE_SRCS2})
-# Append SOTResult panel
+# Append DrillHoldReader
+LIST(APPEND IFACES ${IFACES1})
+LIST(APPEND IFACE_SRCS ${IFACE_SRCS1})
+# Append PointSetReader
+LIST(APPEND IFACES ${IFACES2})
+LIST(APPEND IFACE_SRCS ${IFACE_SRCS2})
+# Append GocadReader
 LIST(APPEND IFACES ${IFACES3})
 LIST(APPEND IFACE_SRCS ${IFACE_SRCS3})
-# Append DrillHoleReader panel
+# Append LineNetworkReader
 LIST(APPEND IFACES ${IFACES4})
 LIST(APPEND IFACE_SRCS ${IFACE_SRCS4})
-#Append PointSetReader panel
+#Append FLAC3DReader
 LIST(APPEND IFACES ${IFACES5})
 LIST(APPEND IFACE_SRCS ${IFACE_SRCS5})
-#Append GocadReader panel
+#Append 3DECReader
 LIST(APPEND IFACES ${IFACES6})
 LIST(APPEND IFACE_SRCS ${IFACE_SRCS6})
-
-LIST(APPEND IFACES ${IFACES7})
-LIST(APPEND IFACE_SRCS ${IFACE_SRCS7})
-
-#LIST(APPEND IFACES ${IFACES8})
-#LIST(APPEND IFACE_SRCS ${IFACE_SRCS8})
-
-LIST(APPEND IFACES ${IFACES9})
-LIST(APPEND IFACE_SRCS ${IFACE_SRCS9})
-
-LIST(APPEND IFACES ${IFACES10})
-LIST(APPEND IFACE_SRCS ${IFACE_SRCS10})
 
 ADD_PARAVIEW_PLUGIN(PVGReadersSMPlugin "1.0"
 			SERVER_MANAGER_XML ReadersSM.xml
@@ -224,7 +192,7 @@ ADD_PARAVIEW_PLUGIN(PVGReadersCPlugin "1.0"
 	#INCLUDE_DIRECTORIES(OracleReader)
 	#ADD_SUBDIRECTORY(OracleReader)
 	
-#ENDIF (PVG_BUILD_ORACLE)
+#ENDIF(PVG_BUILD_ORACLE)
 ##############################################################	
 
 ##############################################################
@@ -232,21 +200,18 @@ ADD_PARAVIEW_PLUGIN(PVGReadersCPlugin "1.0"
 #OPTION(PVG_BUILD_ODBC "Build ODBC Reader Plugin" OFF)
 #IF (PVG_BUILD_ODBC)
 	#ADD_SUBDIRECTORY(ODBCReader)
-#ENDIF (PVG_BUILD_ODBC)
+#ENDIF(PVG_BUILD_ODBC)
 ##############################################################	
 
 #CPACK CODE TO BUNDLE THE DLLS CORRECTLY
-INSTALL(TARGETS PVGReadersSMPlugin PVGReadersGUIPlugin PVGReadersCPlugin
-	RUNTIME DESTINATION bin/plugins COMPONENT Runtime
-	LIBRARY DESTINATION bin/plugins 
-	ARCHIVE DESTINATION bin/plugins 
-  )
+INSTALL(TARGETS PVGReadersGUIPlugin PVGReadersSMPlugin PVGReadersCPlugin
+	RUNTIME DESTINATION . COMPONENT PVGReaders
+	LIBRARY DESTINATION . COMPONENT PVGReaders
+	ARCHIVE DESTINATION . COMPONENT PVGReaders
+	)
   
 set(CPACK_COMPONENT_PVGREADERS_DISPLAY_NAME "ParaViewGeo Readers")  
 set(CPACK_COMPONENT_PVGREADERS_DESCRIPTION 
    "Readers for importing mining data into ParaView")
 
 ENDIF(QT4_FOUND)
-
-		
-
