@@ -3,7 +3,8 @@ FIND_PACKAGE(ParaView REQUIRED)
 INCLUDE(${PARAVIEW_USE_FILE})
 
 ##########################################################################
-IF(NOT ${ParaView_SOURCE_DIR})
+IF(NOT "${ParaView_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
+	MESSAGE("Standalone PVGPlugins build")
 	CMAKE_MINIMUM_REQUIRED(VERSION 2.6.3 FATAL_ERROR)
 	IF(COMMAND cmake_policy)
 		cmake_policy(SET CMP0003 NEW)
@@ -11,8 +12,8 @@ IF(NOT ${ParaView_SOURCE_DIR})
 
 	# version control
 	SET (PVGPlugins_VERSION_MAJOR 1)
-	SET (PVGPlugins_VERSION_MINOR 0)
-	SET (PVGPlugins_VERSION_PATCH 0)
+	SET (PVGPlugins_VERSION_MINOR 1)
+	SET (PVGPlugins_VERSION_PATCH 2)
 
 	SET(PVGPlugins_VERSION "${PVGPlugins_VERSION_MAJOR}.${PVGPlugins_VERSION_MINOR}")
 	SET(PVGPlugins_VERSION_FULL "${PVGPlugins_VERSION}.${PVGPlugins_VERSION_PATCH}")
@@ -63,14 +64,12 @@ IF(NOT ${ParaView_SOURCE_DIR})
 	
 	SET(PVGPlugins_INSTALL_BIN_DIR bin)
 	
-	SET(CPACK_PACKAGE_NAME "ParaViewGeo Plugins")
+	SET(CPACK_PACKAGE_NAME "ParaViewGeo-Plugins")
 	SET(CPACK_PACKAGE_VENDOR "www.objectivity.ca")
 	SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "ParaViewGeo Plugins")
 	SET(CPACK_PACKAGE_VERSION ${PVGPlugins_VERSION_FULL})
 	SET(CPACK_RESOURCE_FILE_LICENSE "${PVGPlugins_SOURCE_DIR}/PVG_PLUGINS_LICENSE.txt")
-	SET(CPACK_COMPONENTS_ALL PVGFilters PVGReaders PVGWriters PVGNonBSDPlugins)
-	INCLUDE(CPack)
-ENDIF()
+ENDIF(NOT "${ParaView_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
 ##########################################################################
 
 OPTION(ParaViewGeo_Filters "Build ParaViewGeo Filters" ON)
@@ -117,3 +116,9 @@ ENDIF(ParaViewGeo_NonBSDPlugins)
 #########################################################################
 # the name that appears in the installation wizard
 #set(CPACK_PACKAGE_INSTALL_DIRECTORY "ParaViewGeo Plugins ${PVGPlugins_VERSION_FULL}")
+
+
+IF(NOT "${ParaView_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
+	SET(CPACK_COMPONENTS_ALL PVGFilters PVGReaders PVGWriters PVGNonBSDPlugins)
+	INCLUDE(CPack)
+ENDIF(NOT "${ParaView_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
