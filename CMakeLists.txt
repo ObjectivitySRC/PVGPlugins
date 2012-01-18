@@ -77,20 +77,26 @@ OPTION(ParaViewGeo_Readers "Build ParaViewGeo Readers" ON)
 OPTION(ParaViewGeo_Writers "Build ParaViewGeo Writers" ON)
 OPTION(ParaViewGeo_NonBSDPlugins "Build ParaViewGeo Non-BSD Licensed Plugins" OFF)
 
+SET(COMPONENTS_STRING "")
+
 IF (ParaViewGeo_Filters)
 	ADD_SUBDIRECTORY(Filters)
+	SET(COMPONENTS_STRING "${COMPONENTS_STRING}PVGFilters;")
 ENDIF(ParaViewGeo_Filters)
 
 IF (ParaViewGeo_Readers)
 	ADD_SUBDIRECTORY(Readers)
+	SET(COMPONENTS_STRING "${COMPONENTS_STRING}PVGReaders;")
 ENDIF(ParaViewGeo_Readers)
 
 IF(ParaViewGeo_Writers)
 	ADD_SUBDIRECTORY(Writers)
+	SET(COMPONENTS_STRING "${COMPONENTS_STRING}PVGWriters;")
 ENDIF(ParaViewGeo_Writers)
 
 IF(ParaViewGeo_NonBSDPlugins)
 	ADD_SUBDIRECTORY(NonBSDPlugins)
+	SET(COMPONENTS_STRING "${COMPONENTS_STRING}PVGNonBSDPlugins;")
 ENDIF(ParaViewGeo_NonBSDPlugins)
 
 #MACRO(paraview_build_optional_plugin name comment subdirectory default)
@@ -113,12 +119,8 @@ ENDIF(ParaViewGeo_NonBSDPlugins)
 #paraview_build_optional_plugin(
 #    PVGWriters "ParaViewGeo-Writers" Writers ON)
 
-#########################################################################
-# the name that appears in the installation wizard
-#set(CPACK_PACKAGE_INSTALL_DIRECTORY "ParaViewGeo Plugins ${PVGPlugins_VERSION_FULL}")
-
-
 IF(NOT "${ParaView_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
-	SET(CPACK_COMPONENTS_ALL PVGFilters PVGReaders PVGWriters PVGNonBSDPlugins)
+	SET(CPACK_COMPONENTS_ALL ${COMPONENTS_STRING})
+	MESSAGE("Adding the following components: ${COMPONENTS_STRING}")
 	INCLUDE(CPack)
 ENDIF(NOT "${ParaView_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
