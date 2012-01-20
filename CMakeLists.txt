@@ -2,10 +2,17 @@ PROJECT(PVGPlugins)
 FIND_PACKAGE(ParaView REQUIRED)
 INCLUDE(${PARAVIEW_USE_FILE})
 
+IF("${PVGPlugins_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
+	SET (PVGPlugins_STAND_ALONE_BUILD TRUE)
+ELSE("${PVGPlugins_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")	
+	SET(ParaView_DIR ${ParaView_BIN_DIR})
+ENDIF("${PVGPlugins_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
+
+
 ##########################################################################
-IF(NOT "${ParaView_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
+IF(PVGPlugins_STAND_ALONE_BUILD)
 	MESSAGE("Standalone PVGPlugins build")
-	CMAKE_MINIMUM_REQUIRED(VERSION 2.6.3 FATAL_ERROR)
+	CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0 FATAL_ERROR)
 	IF(COMMAND cmake_policy)
 		cmake_policy(SET CMP0003 NEW)
     ENDIF(COMMAND cmake_policy)	
@@ -69,7 +76,7 @@ IF(NOT "${ParaView_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
 	SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "ParaViewGeo Plugins")
 	SET(CPACK_PACKAGE_VERSION ${PVGPlugins_VERSION_FULL})
 	SET(CPACK_RESOURCE_FILE_LICENSE "${PVGPlugins_SOURCE_DIR}/PVG_PLUGINS_LICENSE.txt")
-ENDIF(NOT "${ParaView_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
+ENDIF(PVGPlugins_STAND_ALONE_BUILD)
 ##########################################################################
 
 OPTION(ParaViewGeo_Filters "Build ParaViewGeo Filters" ON)
@@ -119,8 +126,8 @@ ENDIF(ParaViewGeo_NonBSDPlugins)
 #paraview_build_optional_plugin(
 #    PVGWriters "ParaViewGeo-Writers" Writers ON)
 
-IF(NOT "${ParaView_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
+IF(PVGPlugins_STAND_ALONE_BUILD)
 	SET(CPACK_COMPONENTS_ALL ${COMPONENTS_STRING})
 	MESSAGE("Adding the following components: ${COMPONENTS_STRING}")
 	INCLUDE(CPack)
-ENDIF(NOT "${ParaView_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
+ENDIF(PVGPlugins_STAND_ALONE_BUILD)
