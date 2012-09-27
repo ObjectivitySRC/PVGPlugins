@@ -32,16 +32,6 @@ IF(PVGPlugins_STAND_ALONE_BUILD)
 		MESSAGE(SEND_ERROR "Qt not found.  Please check the QT_QMAKE_EXECUTABLE variable.")
 	ELSE(NOT QT4_FOUND)
 		# don't go greater than supported version    
-	  STRING(REGEX MATCH "^4\\.4\\.[0-9]+" qt_version4_4_tmp "${QTVERSION}")
-		IF (NOT qt_version4_4_tmp)
-		STRING(REGEX MATCH "^4\\.5\\.[0-9]+" qt_version4_5_tmp "${QTVERSION}")
-		IF (NOT qt_version4_5_tmp)
-		  STRING(REGEX MATCH "^4\\.6\\.[0-9]+" qt_version4_6_tmp "${QTVERSION}")
-		  IF (NOT qt_version4_6_tmp)
-			MESSAGE(SEND_ERROR "Qt ${QTVERSION} not supported.  Please use Qt 4.5 (you may need to clean your dirtied cache).")     		
-		  ENDIF (NOT qt_version4_6_tmp) 
-		ENDIF (NOT qt_version4_5_tmp)    
-	  ENDIF (NOT qt_version4_4_tmp)    
 	ENDIF(NOT QT4_FOUND)
 
 	# help CMake find debug QtUiTools on Windows
